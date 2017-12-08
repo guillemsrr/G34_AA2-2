@@ -108,7 +108,6 @@ void Menu::EventHandler()
 		default:;
 		}
 	}
-
 }
 
 void Menu::Update()
