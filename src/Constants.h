@@ -8,8 +8,7 @@
 #define SCREEN_HEIGHT 704
 
 const std::string MENU_BG = "MENU_BG";
-const std::string LEVEL1_BG = "LEVEL1_BG";
-const std::string LEVEL2_BG = "LEVEL2_BG";
+const std::string LEVEL_BG = "LEVEL_BG";
 const std::string PLAYER1_SPRITE = "PLAYER1_SPRITE";
 const std::string PLAYER2_SPRITE = "PLAYER2_SPRITE";
 

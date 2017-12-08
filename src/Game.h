@@ -1,8 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "Menu.h"
-#include "Level1.h"
-#include "Level2.h"
+#include "Level.h"
 #include "Ranking.h"
 
 class Game

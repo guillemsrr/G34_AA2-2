@@ -9,10 +9,10 @@ Menu::Menu() :hoverLevel1{ false }, hoverLevel2{ false }, hoverRanking{ false },
 
 	Renderer::Instance()->LoadFont({ SAIYAN, PATH_FONT + "saiyan.ttf", 80 });
 	Renderer::Instance()->LoadTexture(MENU_BG, PATH_IMG + "Bomberman_2.jpg");
-	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL1, "PLAY LEVEL1",{ 0, 100, 0, 255 } ,SCREEN_WIDTH / 2, 81 });
-	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL1_HOVER, "PLAY LEVEL1",{ 0,200,0,255 } ,SCREEN_WIDTH / 2,81 });
-	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL2, "PLAY LEVEL2",{ 0,150,0,255 } ,SCREEN_WIDTH / 2,81 });
-	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL2_HOVER, "PLAY LEVEL2",{ 0,250,0,255 } ,SCREEN_WIDTH / 2 ,81 });
+	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL1, "LEVEL ONE",{ 0, 100, 0, 255 } ,SCREEN_WIDTH / 2, 81 });
+	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL1_HOVER, "LEVEL ONE",{ 0,200,0,255 } ,SCREEN_WIDTH / 2,81 });
+	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL2, "LEVEL TWO",{ 0,150,0,255 } ,SCREEN_WIDTH / 2,81 });
+	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL2_HOVER, "LEVEL TWO",{ 0,250,0,255 } ,SCREEN_WIDTH / 2 ,81 });
 	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_EXIT, "EXIT",{ 100,0,0,255 } ,SCREEN_WIDTH / 2 ,81 });
 	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_EXIT_HOVER, "EXIT",{ 200,0,0,255 } ,SCREEN_WIDTH / 2 ,81 });
 	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_RANKING, "RANKING",{ 30,150,40,255 } ,SCREEN_WIDTH / 2 ,81 });

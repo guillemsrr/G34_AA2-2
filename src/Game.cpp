@@ -38,6 +38,11 @@ void Game::run()
 				m_currentScene = nullptr;
 				m_gameState = GameState::EXIT;
 				break;
+			case GameState::LEVEL1:
+				delete m_currentScene;
+				m_currentScene = nullptr;
+				m_gameState = GameState::EXIT;
+				break;
 			}
 			break;
 
@@ -46,7 +51,7 @@ void Game::run()
 			{
 			case GameState::MENU:
 				delete m_currentScene;
-				m_currentScene = new Level1();
+				m_currentScene = new Level(1);
 				m_gameState = GameState::LEVEL1;
 				break;
 			default:
@@ -58,7 +63,7 @@ void Game::run()
 			{
 			case GameState::MENU:
 				delete m_currentScene;
-				m_currentScene = new Level2();
+				m_currentScene = new Level(2);
 				m_gameState = GameState::LEVEL2;
 				break;
 			default:
