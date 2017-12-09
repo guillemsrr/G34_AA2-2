@@ -4,6 +4,7 @@
 #include <SDL_image.h>
 #include "Constants.h"
 #include <SDL_ttf.h>
+#include "Bomb.h"
 
 class Player
 {
@@ -12,8 +13,9 @@ public:
 	~Player();
 	int getPlayerTag();
 	SDL_Rect PlayerPosition, PlayerRect;
-	Vector2 getFrameStats();
+	void bomb();
 
 private:
 	int points, playerTag, textWidth, textHeight, frameWidth, frameHeight, frameTime;
+	Bomb *ptrBomb;
 };

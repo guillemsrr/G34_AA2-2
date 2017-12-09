@@ -33,6 +33,8 @@ void Level::EventHandler()
 			if (event.key.keysym.sym == SDLK_ESCAPE) exit = true; 
 			keyDown = event.key.keysym.sym; 
 			break;
+		case SDL_KEYUP:
+			keyDown = NULL;//correcte?
 		default:;
 		}
 	}
@@ -49,26 +51,26 @@ void Level::Update()
 			frameTime = 0;
 			p1->PlayerPosition.y -= step;
 			p1->PlayerRect.y = 0;
-			p1->PlayerRect.x += p1->getFrameStats().x;
-			if (p1->PlayerRect.x >= p1->getFrameStats().x * 2)
+			p1->PlayerRect.x += p1->PlayerRect.w;
+			if (p1->PlayerRect.x >= p1->PlayerRect.w * 2)
 				p1->PlayerRect.x = 0;
 		}
 		else if (keyDown == SDLK_a)
 		{
 			frameTime = 0;
 			p1->PlayerPosition.x -= step;
-			p1->PlayerRect.y = p1->getFrameStats().y;
-			p1->PlayerRect.x += p1->getFrameStats().x;
-			if (p1->PlayerRect.x >= p1->getFrameStats().x * 3)
+			p1->PlayerRect.y = p1->PlayerRect.h;
+			p1->PlayerRect.x += p1->PlayerRect.w;
+			if (p1->PlayerRect.x >= p1->PlayerRect.w * 3)
 				p1->PlayerRect.x = 0;
 		}
 		else if (keyDown == SDLK_s)
 		{
 			frameTime = 0;
 			p1->PlayerPosition.y += step;
-			p1->PlayerRect.y = p1->getFrameStats().y * 2;
-			p1->PlayerRect.x += p1->getFrameStats().x;
-			if (p1->PlayerRect.x >= p1->getFrameStats().x * 3)
+			p1->PlayerRect.y = p1->PlayerRect.h * 2;
+			p1->PlayerRect.x += p1->PlayerRect.w;
+			if (p1->PlayerRect.x >= p1->PlayerRect.w * 3)
 				p1->PlayerRect.x = 0;
 		}
 
@@ -76,9 +78,9 @@ void Level::Update()
 		{
 			frameTime = 0;
 			p1->PlayerPosition.x += step;
-			p1->PlayerRect.y = p1->getFrameStats().y * 3;
-			p1->PlayerRect.x += p1->getFrameStats().x;
-			if (p1->PlayerRect.x >= p1->getFrameStats().x * 3)
+			p1->PlayerRect.y = p1->PlayerRect.h * 3;
+			p1->PlayerRect.x += p1->PlayerRect.w;
+			if (p1->PlayerRect.x >= p1->PlayerRect.w* 3)
 				p1->PlayerRect.x = 0;
 		}
 		if (keyDown == SDLK_UP)
@@ -86,36 +88,44 @@ void Level::Update()
 			frameTime = 0;
 			p2->PlayerPosition.y -= step;
 			p2->PlayerRect.y = 0;
-			p2->PlayerRect.x += p2->getFrameStats().x;
-			if (p2->PlayerRect.x >= p2->getFrameStats().x * 2)
+			p2->PlayerRect.x += p2->PlayerRect.w;
+			if (p2->PlayerRect.x >= p2->PlayerRect.w * 2)
 				p2->PlayerRect.x = 0;
 		}
 		else if (keyDown == SDLK_LEFT)
 		{
 			frameTime = 0;
 			p2->PlayerPosition.x -= step;
-			p2->PlayerRect.y = p2->getFrameStats().y;
-			p2->PlayerRect.x += p2->getFrameStats().x;
-			if (p2->PlayerRect.x >= p2->getFrameStats().x * 3)
+			p2->PlayerRect.y = p2->PlayerRect.h;
+			p2->PlayerRect.x += p2->PlayerRect.w;
+			if (p2->PlayerRect.x >= p2->PlayerRect.w* 3)
 				p2->PlayerRect.x = 0;
 		}
 		else if (keyDown == SDLK_DOWN)
 		{
 			frameTime = 0;
 			p2->PlayerPosition.y += step;
-			p2->PlayerRect.y = p2->getFrameStats().y * 2;
-			p2->PlayerRect.x += p2->getFrameStats().x;
-			if (p2->PlayerRect.x >= p2->getFrameStats().x * 3)
+			p2->PlayerRect.y = p2->PlayerRect.h* 2;
+			p2->PlayerRect.x += p2->PlayerRect.w;
+			if (p2->PlayerRect.x >= p2->PlayerRect.w * 3)
 				p2->PlayerRect.x = 0;
 		}
 		else if (keyDown == SDLK_RIGHT)
 		{
 			frameTime = 0;
 			p2->PlayerPosition.x += step;
-			p2->PlayerRect.y = p2->getFrameStats().y * 3;
-			p2->PlayerRect.x += p2->getFrameStats().x;
-			if (p2->PlayerRect.x >= p2->getFrameStats().x * 3)
+			p2->PlayerRect.y = p2->PlayerRect.h* 3;
+			p2->PlayerRect.x += p2->PlayerRect.w;
+			if (p2->PlayerRect.x >= p2->PlayerRect.w * 3)
 				p2->PlayerRect.x = 0;
+		}
+		if (keyDown == SDLK_SPACE)
+		{
+			p1->bomb();
+		}
+		if (keyDown == SDLK_RCTRL)
+		{
+			p2->bomb();
 		}
 	}
 

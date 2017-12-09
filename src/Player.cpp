@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(int num): playerTag{ num }
+Player::Player(int num): playerTag{ num }, ptrBomb{nullptr}
 {
 	Renderer::Instance()->LoadTexture(PLAYER1_SPRITE, PATH_IMG + "player1.png");
 	Renderer::Instance()->LoadTexture(PLAYER2_SPRITE, PATH_IMG + "player2.png");
@@ -32,8 +32,18 @@ int Player::getPlayerTag()
 	return playerTag;
 }
 
-Vector2 Player::getFrameStats()
+void Player::bomb()
 {
-	return { frameWidth, frameHeight };
+	if (ptrBomb == nullptr)
+	{
+		ptrBomb = new Bomb(PlayerPosition);
+		while (!ptrBomb->end)
+		{
+			ptrBomb->Update();
+			ptrBomb->Draw();
+		}
+		ptrBomb = nullptr;
+	} 
+	//else 
 }
 

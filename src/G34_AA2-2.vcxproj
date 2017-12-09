@@ -152,7 +152,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bomb.cpp" />
-    <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
@@ -165,7 +164,6 @@
   <ItemGroup>
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Constants.h" />
-    <ClInclude Include="Drawable.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Menu.h" />
