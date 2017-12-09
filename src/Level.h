@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "Player.h"
 #include <list>
-#define SPEED 6
+#define SPEED 10
 class Level :
 	public Scene
 {

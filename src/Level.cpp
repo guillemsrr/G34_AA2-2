@@ -48,76 +48,157 @@ void Level::Update()
 	{
 		if (keyDown == SDLK_w)
 		{
+			bool stay = false;
 			frameTime = 0;
-			p1->PlayerPosition.y -= step;
 			p1->PlayerRect.y = 0;
 			p1->PlayerRect.x += p1->PlayerRect.w;
 			if (p1->PlayerRect.x >= p1->PlayerRect.w * 2)
 				p1->PlayerRect.x = 0;
+			/*
+			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			{
+				if (isCollisioning(p1->PlayerPosition, *it))
+				{
+					stay = true;
+				}
+			}
+			*/
+			if(!stay) p1->PlayerPosition.y -= step;
+
 		}
 		else if (keyDown == SDLK_a)
 		{
+			bool stay = false;
 			frameTime = 0;
-			p1->PlayerPosition.x -= step;
 			p1->PlayerRect.y = p1->PlayerRect.h;
 			p1->PlayerRect.x += p1->PlayerRect.w;
 			if (p1->PlayerRect.x >= p1->PlayerRect.w * 3)
 				p1->PlayerRect.x = 0;
+			/*
+			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			{
+				if (isCollisioning(p1->PlayerPosition, *it))
+				{
+					stay = true;
+				}
+			}
+			*/
+			if(!stay) p1->PlayerPosition.x -= step;
 		}
 		else if (keyDown == SDLK_s)
 		{
+			bool stay = false;
 			frameTime = 0;
-			p1->PlayerPosition.y += step;
 			p1->PlayerRect.y = p1->PlayerRect.h * 2;
 			p1->PlayerRect.x += p1->PlayerRect.w;
 			if (p1->PlayerRect.x >= p1->PlayerRect.w * 3)
 				p1->PlayerRect.x = 0;
+			/*
+			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			{
+				if (isCollisioning(p1->PlayerPosition, *it))
+				{
+					stay = true;
+				}
+			}
+			*/
+			if (!stay) p1->PlayerPosition.y += step;
 		}
 
 		else if (keyDown == SDLK_d)
 		{
+			bool stay = false;
 			frameTime = 0;
-			p1->PlayerPosition.x += step;
 			p1->PlayerRect.y = p1->PlayerRect.h * 3;
 			p1->PlayerRect.x += p1->PlayerRect.w;
 			if (p1->PlayerRect.x >= p1->PlayerRect.w* 3)
 				p1->PlayerRect.x = 0;
+			/*
+			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			{
+				if (isCollisioning(p1->PlayerPosition, *it))
+				{
+					stay = true;
+				}
+			}
+			*/
+			if (!stay) p1->PlayerPosition.x += step;
 		}
 		if (keyDown == SDLK_UP)
 		{
+			bool stay = false;
 			frameTime = 0;
-			p2->PlayerPosition.y -= step;
 			p2->PlayerRect.y = 0;
 			p2->PlayerRect.x += p2->PlayerRect.w;
 			if (p2->PlayerRect.x >= p2->PlayerRect.w * 2)
 				p2->PlayerRect.x = 0;
+			/*
+			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			{
+				if (isCollisioning(p2->PlayerPosition, *it))
+				{
+					stay = true;
+				}
+			}
+			*/
+			if (!stay) p2->PlayerPosition.y -= step;
 		}
 		else if (keyDown == SDLK_LEFT)
 		{
+			bool stay = false;
 			frameTime = 0;
-			p2->PlayerPosition.x -= step;
 			p2->PlayerRect.y = p2->PlayerRect.h;
 			p2->PlayerRect.x += p2->PlayerRect.w;
 			if (p2->PlayerRect.x >= p2->PlayerRect.w* 3)
 				p2->PlayerRect.x = 0;
+			/*
+			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			{
+				if (isCollisioning(p2->PlayerPosition, *it))
+				{
+					stay = true;
+				}
+			}
+			*/
+			if (!stay) p2->PlayerPosition.x -= step;
 		}
 		else if (keyDown == SDLK_DOWN)
 		{
+			bool stay = false;
 			frameTime = 0;
-			p2->PlayerPosition.y += step;
 			p2->PlayerRect.y = p2->PlayerRect.h* 2;
 			p2->PlayerRect.x += p2->PlayerRect.w;
 			if (p2->PlayerRect.x >= p2->PlayerRect.w * 3)
 				p2->PlayerRect.x = 0;
+			/*
+			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			{
+				if (isCollisioning(p2->PlayerPosition, *it))
+				{
+					stay = true;
+				}
+			}
+			*/
+			if (!stay) p2->PlayerPosition.y += step;
 		}
 		else if (keyDown == SDLK_RIGHT)
 		{
+			bool stay = false;
 			frameTime = 0;
-			p2->PlayerPosition.x += step;
 			p2->PlayerRect.y = p2->PlayerRect.h* 3;
 			p2->PlayerRect.x += p2->PlayerRect.w;
 			if (p2->PlayerRect.x >= p2->PlayerRect.w * 3)
 				p2->PlayerRect.x = 0;
+			/*
+			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			{
+				if (isCollisioning(p2->PlayerPosition, *it))
+				{
+					stay = true;
+				}
+			}
+			*/
+			if (!stay) p2->PlayerPosition.x += step;
 		}
 		if (keyDown == SDLK_SPACE)
 		{
@@ -153,14 +234,52 @@ void Level::Update()
 
 	//Blocks Collisions:
 	
-	if (isCollisioning(p1->PlayerRect, blockRect))
+	for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
 	{
-		//p1->PlayerPosition = 
+		if (isCollisioning(p1->PlayerPosition, *it))
+		{
+			if (keyDown == SDLK_w)
+			{
+				p1->PlayerPosition.y += step;
+
+			}
+			else if (keyDown == SDLK_a)
+			{
+				p1->PlayerPosition.x += step;
+
+			}
+			else if (keyDown == SDLK_s)
+			{
+				p1->PlayerPosition.y -= step;
+			}
+
+			else if (keyDown == SDLK_d)
+			{
+				p1->PlayerPosition.x -= step;
+			}
+		}
+		if (isCollisioning(p2->PlayerPosition, *it))
+		{
+			if (keyDown == SDLK_UP)
+			{
+				p2->PlayerPosition.y += step;
+			}
+			else if (keyDown == SDLK_LEFT)
+			{
+				p2->PlayerPosition.x += step;
+			}
+			else if (keyDown == SDLK_DOWN)
+			{
+				p2->PlayerPosition.y -= step;
+			}
+			else if (keyDown == SDLK_RIGHT)
+			{
+				p2->PlayerPosition.x -= step;
+			}
+		}
 	}
-	if (isCollisioning(p2->PlayerRect, blockRect))
-	{
-		//p2->PlayerPosition = 
-	}
+	
+	
 
 	//Bombs:
 	if (p1Bomb != nullptr)

@@ -1,4 +1,5 @@
 #include "Bomb.h"
+#define SPEED 10
 
 Bomb::Bomb(SDL_Rect pos): bombPosition{pos}, explode{false}, end{false}
 {
@@ -41,7 +42,7 @@ void Bomb :: Update()
 	else if (explode)
 	{
 		frameTime++;
-		if (SCREEN_FPS / frameTime <= 3)
+		if (SCREEN_FPS / frameTime <= SPEED)
 		{
 			frameTime = 0;
 			explosionRect.x += explosionRect.w;

@@ -15,11 +15,11 @@ Player::Player(int num): playerTag{ num }, ptrBomb{nullptr}
 	//només canvia el punt inicial x,y.
 	if (num == 1)
 	{
-		PlayerPosition = { 50,  SCREEN_HEIGHT / 2, 48, 48 };
+		PlayerPosition = { SCREEN_WIDTH/15,  SCREEN_HEIGHT / 15*8, 48, 48 };
 	}
 	else if (num == 2)
 	{
-		PlayerPosition = { SCREEN_WIDTH-50,  SCREEN_HEIGHT / 2, 48, 48 };
+		PlayerPosition = { SCREEN_WIDTH- SCREEN_WIDTH / 15 * 2,  SCREEN_HEIGHT / 15 * 8, 48, 48 };
 	}
 }
 
