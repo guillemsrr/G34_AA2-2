@@ -1,6 +1,6 @@
 #include "Level.h"
 
-Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, step{ 15 }, p1Bomb{nullptr}, p2Bomb{nullptr}
+Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, step{ 16 }, p1Bomb{nullptr}, p2Bomb{nullptr}
 {
 	m_sceneState= Scene::SceneState::Running;
 	Renderer::Instance()->LoadTexture(LEVEL_BG, PATH_IMG + "bgGame.jpg");
@@ -316,10 +316,6 @@ void Level::Draw()
 	//Background
 	Renderer::Instance()->PushImage(LEVEL_BG, { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT });
 
-	//Animated Sprite
-	Renderer::Instance()->PushSprite(PLAYER1_SPRITE, p1->PlayerRect, p1->PlayerPosition);
-	Renderer::Instance()->PushSprite(PLAYER2_SPRITE, p2->PlayerRect, p2->PlayerPosition);
-
 	//Blocks:
 	for (int i = 1; i <= 6; i++)
 	{
@@ -327,6 +323,10 @@ void Level::Draw()
 		{
 			SDL_Rect blockPosition = { (SCREEN_WIDTH / 15)* (2 * i), (SCREEN_HEIGHT / 15) *(2 * j + 2), 48,48 };
 			Renderer::Instance()->PushSprite(ITEMS, blockRect, blockPosition);
+			//blockPosition.x += 10;
+			//blockPosition.y += 10;
+			//blockPosition.w -= 10;
+			//blockPosition.h -= 10,
 			blockList.push_back(blockPosition);
 		}
 	}
@@ -340,6 +340,10 @@ void Level::Draw()
 	{
 		p2Bomb->Draw();
 	}
+
+	//Animated Sprite
+	Renderer::Instance()->PushSprite(PLAYER1_SPRITE, p1->PlayerRect, p1->PlayerPosition);
+	Renderer::Instance()->PushSprite(PLAYER2_SPRITE, p2->PlayerRect, p2->PlayerPosition);
 	
 	Renderer::Instance()->Render();
 }
