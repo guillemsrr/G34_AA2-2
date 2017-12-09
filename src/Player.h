@@ -13,9 +13,9 @@ public:
 	~Player();
 	int getPlayerTag();
 	SDL_Rect PlayerPosition, PlayerRect;
-	void bomb();
+	Bomb* bomb();
+	Bomb *ptrBomb;
 
 private:
 	int points, playerTag, textWidth, textHeight, frameWidth, frameHeight, frameTime;
-	Bomb *ptrBomb;
 };

@@ -1,6 +1,6 @@
 #include "Bomb.h"
 
-Bomb::Bomb(SDL_Rect pos): bombPosition{pos}, explode{false}
+Bomb::Bomb(SDL_Rect pos): bombPosition{pos}, explode{false}, end{false}
 {
 	Renderer::Instance()->LoadTexture(ITEMS, PATH_IMG + "items.png");
 	textWidth = Renderer::Instance()->GetTextureSize(ITEMS).x;
@@ -14,7 +14,7 @@ Bomb::Bomb(SDL_Rect pos): bombPosition{pos}, explode{false}
 	textHeight = Renderer::Instance()->GetTextureSize(EXPLOSIONS).y;
 	frameWidth = textWidth / 4;
 	frameHeight = textHeight / 7;
-	bombRect = { 0,0,frameWidth,frameHeight };
+	explosionRect = { 0,0,frameWidth,frameHeight };
 
 	//comencem el temps:
 	//start_time.now();
@@ -41,21 +41,21 @@ void Bomb :: Update()
 	else if (explode)
 	{
 		frameTime++;
-		if (SCREEN_FPS / frameTime <= 6)
+		if (SCREEN_FPS / frameTime <= 3)
 		{
 			frameTime = 0;
-			bombRect.x += bombRect.w;
-			if (bombRect.x >= textWidth)
-				bombRect.x = 0;
+			explosionRect.x += explosionRect.w;
+			if (explosionRect.x >= textWidth)
+				explosionRect.x = 0;
 		}
 	}
 }
 
 void Bomb::Draw()
 {
-	Renderer::Instance()->Clear();
+	//Renderer::Instance()->Clear();
 	if(!explode) Renderer::Instance()->PushSprite(ITEMS, bombRect, bombPosition);
-	else 
+	else Renderer::Instance()->PushSprite(EXPLOSIONS, explosionRect, bombPosition);
 
 	Renderer::Instance()->Render();
 }

@@ -1,6 +1,6 @@
 #include "Level.h"
 
-Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, step{ 15 }
+Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, step{ 15 }, p1Bomb{nullptr}, p2Bomb{nullptr}
 {
 	m_sceneState= Scene::SceneState::Running;
 	Renderer::Instance()->LoadTexture(LEVEL_BG, PATH_IMG + "bgGame.jpg");
@@ -121,11 +121,11 @@ void Level::Update()
 		}
 		if (keyDown == SDLK_SPACE)
 		{
-			p1->bomb();
+			if(p1Bomb==nullptr) p1Bomb=p1->bomb();
 		}
 		if (keyDown == SDLK_RCTRL)
 		{
-			p2->bomb();
+			if(p2Bomb==nullptr)  p2Bomb=p2->bomb();
 		}
 	}
 
@@ -161,6 +161,33 @@ void Level::Update()
 	{
 		//p2->PlayerPosition = 
 	}
+
+	//Bombs:
+	if (p1Bomb != nullptr)
+	{
+		if (!p1Bomb->end)
+		{
+			p1Bomb->Update();
+		}
+		if (p1Bomb->end)
+		{
+			delete p1Bomb;
+			p1Bomb = nullptr;
+		}
+	}
+	
+	if (p2Bomb != nullptr)
+	{
+		if (!p2Bomb->end)
+		{
+			p2Bomb->Update();
+		}
+		if (p2Bomb->end)
+		{
+			delete p2Bomb;
+			p2Bomb = nullptr;
+		}
+	}
 }
 
 void Level::Draw()
@@ -179,8 +206,20 @@ void Level::Draw()
 	{
 		for (int j = 1; j <= 5; j++)
 		{
-			Renderer::Instance()->PushSprite(ITEMS, blockRect, {(SCREEN_WIDTH / 15 )* i + 48*(i), (SCREEN_HEIGHT / 15) * j + 48*(j+2), 48,48 });
+			SDL_Rect blockPosition = { (SCREEN_WIDTH / 15)* (2 * i), (SCREEN_HEIGHT / 15) *(2 * j + 2), 48,48 };
+			Renderer::Instance()->PushSprite(ITEMS, blockRect, blockPosition);
+			blockList.push_back(blockPosition);
 		}
+	}
+
+	//Bombs:
+	if (p1Bomb != nullptr && !p1Bomb->end)
+	{
+		p1Bomb->Draw();
+	}
+	if (p2Bomb != nullptr && !p2Bomb->end)
+	{
+		p2Bomb->Draw();
 	}
 	
 	Renderer::Instance()->Render();

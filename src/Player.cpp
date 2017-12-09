@@ -32,18 +32,9 @@ int Player::getPlayerTag()
 	return playerTag;
 }
 
-void Player::bomb()
+Bomb* Player::bomb()
 {
-	if (ptrBomb == nullptr)
-	{
-		ptrBomb = new Bomb(PlayerPosition);
-		while (!ptrBomb->end)
-		{
-			ptrBomb->Update();
-			ptrBomb->Draw();
-		}
-		ptrBomb = nullptr;
-	} 
-	//else 
+	ptrBomb = new Bomb(PlayerPosition);
+	return ptrBomb;
 }
 
