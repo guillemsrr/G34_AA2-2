@@ -224,16 +224,15 @@ void Level::Update()
 	*/
 	if (p1->PlayerPosition.x >= SCREEN_WIDTH - SCREEN_WIDTH/15*2) p1->PlayerPosition.x = SCREEN_WIDTH - SCREEN_WIDTH / 15*2;
 	if (p1->PlayerPosition.x <= SCREEN_WIDTH / 15) p1->PlayerPosition.x = SCREEN_WIDTH / 15;
-	if (p1->PlayerPosition.y <= (SCREEN_HEIGHT/15)*3) p1->PlayerPosition.y = (SCREEN_HEIGHT / 15) * 3;
+	if (p1->PlayerPosition.y <= SCREEN_HEIGHT / 15 + 80) p1->PlayerPosition.y = SCREEN_HEIGHT / 15 + 80;
 	if (p1->PlayerPosition.y >= SCREEN_HEIGHT - (SCREEN_HEIGHT / 15)*2) p1->PlayerPosition.y = SCREEN_HEIGHT - (SCREEN_HEIGHT / 15) * 2;
 
 	if (p2->PlayerPosition.x >= SCREEN_WIDTH - SCREEN_WIDTH / 15*2) p2->PlayerPosition.x = SCREEN_WIDTH - SCREEN_WIDTH / 15*2;
 	if (p2->PlayerPosition.x <= SCREEN_WIDTH / 15) p2->PlayerPosition.x = SCREEN_WIDTH / 15;
-	if (p2->PlayerPosition.y <= (SCREEN_HEIGHT / 15) * 3) p2->PlayerPosition.y = (SCREEN_HEIGHT / 15) * 3;
+	if (p2->PlayerPosition.y <= SCREEN_HEIGHT / 15 + 80 ) p2->PlayerPosition.y = SCREEN_HEIGHT / 15 + 80;
 	if (p2->PlayerPosition.y >= SCREEN_HEIGHT - (SCREEN_HEIGHT / 15) * 2) p2->PlayerPosition.y = SCREEN_HEIGHT - (SCREEN_HEIGHT / 15) * 2;
 
 	//Blocks Collisions:
-	
 	for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
 	{
 		if (isCollisioning(p1->PlayerPosition, *it))
@@ -321,12 +320,12 @@ void Level::Draw()
 	{
 		for (int j = 1; j <= 5; j++)
 		{
-			SDL_Rect blockPosition = { (SCREEN_WIDTH / 15)* (2 * i), (SCREEN_HEIGHT / 15) *(2 * j + 2), 48,48 };
+			SDL_Rect blockPosition = { static_cast<int>((SCREEN_WIDTH / 15)* (2 * i)), static_cast<int>(((SCREEN_HEIGHT -80)/ 13)* (2 * j)+80), 48,48 };
 			Renderer::Instance()->PushSprite(ITEMS, blockRect, blockPosition);
-			//blockPosition.x += 10;
-			//blockPosition.y += 10;
-			//blockPosition.w -= 10;
-			//blockPosition.h -= 10,
+			//blockPosition.x += 20;
+			//blockPosition.y += 2;
+			//blockPosition.w -= 2;
+			//blockPosition.h -= 5;
 			blockList.push_back(blockPosition);
 		}
 	}
