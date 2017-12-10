@@ -1,6 +1,6 @@
 #include "Level.h"
 
-Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, step{ 16 }, p1Bomb{nullptr}, p2Bomb{nullptr}
+Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, step{ 16 }
 {
 	m_sceneState= Scene::SceneState::Running;
 	Renderer::Instance()->LoadTexture(LEVEL_BG, PATH_IMG + "bgGame.jpg");
@@ -13,6 +13,28 @@ Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown
 
 	blockRect = { 0,0, frameWidth,frameHeight };
 	wallRect = { frameWidth,0,frameWidth,frameHeight };
+
+	//start the grid:
+	for (int i = 0; i <= 12; i++)
+	{
+		for (int j = 0; j <= 10; j++)
+		{
+			if (i == 0 && j == 5) 
+			{
+				grid[i][j] = "player1";
+				p1->posX = i;
+				p1->posY = j;
+			} 
+			else if (i == 12 && j == 5)
+			{
+				grid[i][j] = "player2";
+				p2->posX = i;
+				p2->posY = j;
+			}
+			else grid[i][j] = "empty";
+		}
+	}
+	restartExplosionLimits();
 }
 
 Level::~Level()
@@ -30,11 +52,9 @@ void Level::EventHandler()
 			exit = true;	 
 			break;
 		case SDL_KEYDOWN:	
-			if (event.key.keysym.sym == SDLK_ESCAPE) exit = true; 
-			keyDown = event.key.keysym.sym; 
+			if (event.key.keysym.sym == SDLK_ESCAPE) exit = true;
+			if(!p1->moving && !p2->moving) keyDown = event.key.keysym.sym; 
 			break;
-		case SDL_KEYUP:
-			keyDown = NULL;//correcte?
 		default:;
 		}
 	}
@@ -48,262 +68,295 @@ void Level::Update()
 	{
 		if (keyDown == SDLK_w)
 		{
-			bool stay = false;
+			p1->moving = true;
 			frameTime = 0;
-			p1->PlayerRect.y = 0;
-			p1->PlayerRect.x += p1->PlayerRect.w;
-			if (p1->PlayerRect.x >= p1->PlayerRect.w * 2)
-				p1->PlayerRect.x = 0;
-			/*
-			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			p1->playerRect.y = 0;
+			p1->playerRect.x += p1->playerRect.w;
+			if (p1->playerRect.x >= p1->playerRect.w * 2)
+				p1->playerRect.x = 0;
+			p1->playerPosition.y -= step;
+			if (p1->isInPosition())
 			{
-				if (isCollisioning(p1->PlayerPosition, *it))
-				{
-					stay = true;
-				}
+				grid[p1->posX][p1->posY] = "empty";
+				p1->posY--;
+				grid[p1->posX][p1->posY] = "player1";
 			}
-			*/
-			if(!stay) p1->PlayerPosition.y -= step;
-
 		}
 		else if (keyDown == SDLK_a)
 		{
-			bool stay = false;
+			p1->moving = true;
 			frameTime = 0;
-			p1->PlayerRect.y = p1->PlayerRect.h;
-			p1->PlayerRect.x += p1->PlayerRect.w;
-			if (p1->PlayerRect.x >= p1->PlayerRect.w * 3)
-				p1->PlayerRect.x = 0;
-			/*
-			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			p1->playerRect.y = p1->playerRect.h;
+			p1->playerRect.x += p1->playerRect.w;
+			if (p1->playerRect.x >= p1->playerRect.w * 3)
+				p1->playerRect.x = 0;
+			p1->playerPosition.x -= step;
+			if (p1->isInPosition())
 			{
-				if (isCollisioning(p1->PlayerPosition, *it))
-				{
-					stay = true;
-				}
+				grid[p1->posX][p1->posY] = "empty";
+				p1->posX--;
+				grid[p1->posX][p1->posY] = "player1";
 			}
-			*/
-			if(!stay) p1->PlayerPosition.x -= step;
 		}
 		else if (keyDown == SDLK_s)
 		{
-			bool stay = false;
+			p1->moving = true;
 			frameTime = 0;
-			p1->PlayerRect.y = p1->PlayerRect.h * 2;
-			p1->PlayerRect.x += p1->PlayerRect.w;
-			if (p1->PlayerRect.x >= p1->PlayerRect.w * 3)
-				p1->PlayerRect.x = 0;
-			/*
-			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			p1->playerRect.y = p1->playerRect.h * 2;
+			p1->playerRect.x += p1->playerRect.w;
+			if (p1->playerRect.x >= p1->playerRect.w * 3)
+				p1->playerRect.x = 0;
+			p1->playerPosition.y += step;
+			if (p1->isInPosition())
 			{
-				if (isCollisioning(p1->PlayerPosition, *it))
-				{
-					stay = true;
-				}
+				grid[p1->posX][p1->posY] = "empty";
+				p1->posY++;
+				grid[p1->posX][p1->posY] = "player1";
 			}
-			*/
-			if (!stay) p1->PlayerPosition.y += step;
 		}
 
 		else if (keyDown == SDLK_d)
 		{
-			bool stay = false;
+			p1->moving = true;
 			frameTime = 0;
-			p1->PlayerRect.y = p1->PlayerRect.h * 3;
-			p1->PlayerRect.x += p1->PlayerRect.w;
-			if (p1->PlayerRect.x >= p1->PlayerRect.w* 3)
-				p1->PlayerRect.x = 0;
-			/*
-			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			p1->playerRect.y = p1->playerRect.h * 3;
+			p1->playerRect.x += p1->playerRect.w;
+			if (p1->playerRect.x >= p1->playerRect.w* 3)
+				p1->playerRect.x = 0;
+			p1->playerPosition.x += step;
+			if (p1->isInPosition())
 			{
-				if (isCollisioning(p1->PlayerPosition, *it))
-				{
-					stay = true;
-				}
+				grid[p1->posX][p1->posY] = "empty";
+				p1->posX++;
+				grid[p1->posX][p1->posY] = "player1";
 			}
-			*/
-			if (!stay) p1->PlayerPosition.x += step;
 		}
 		if (keyDown == SDLK_UP)
 		{
-			bool stay = false;
+			p2->moving = true;
 			frameTime = 0;
-			p2->PlayerRect.y = 0;
-			p2->PlayerRect.x += p2->PlayerRect.w;
-			if (p2->PlayerRect.x >= p2->PlayerRect.w * 2)
-				p2->PlayerRect.x = 0;
-			/*
-			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			p2->playerRect.y = 0;
+			p2->playerRect.x += p2->playerRect.w;
+			if (p2->playerRect.x >= p2->playerRect.w * 2)
+				p2->playerRect.x = 0;
+			p2->playerPosition.y -= step;
+			if (p2->isInPosition())
 			{
-				if (isCollisioning(p2->PlayerPosition, *it))
-				{
-					stay = true;
-				}
+				grid[p2->posX][p2->posY] = "empty";
+				p1->posX--;
+				grid[p2->posX][p2->posY] = "player2";
 			}
-			*/
-			if (!stay) p2->PlayerPosition.y -= step;
 		}
 		else if (keyDown == SDLK_LEFT)
 		{
-			bool stay = false;
+			p2->moving = true;
 			frameTime = 0;
-			p2->PlayerRect.y = p2->PlayerRect.h;
-			p2->PlayerRect.x += p2->PlayerRect.w;
-			if (p2->PlayerRect.x >= p2->PlayerRect.w* 3)
-				p2->PlayerRect.x = 0;
-			/*
-			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			p2->playerRect.y = p2->playerRect.h;
+			p2->playerRect.x += p2->playerRect.w;
+			if (p2->playerRect.x >= p2->playerRect.w* 3)
+				p2->playerRect.x = 0;
+			p2->playerPosition.x -= step;
+			if (p2->isInPosition())
 			{
-				if (isCollisioning(p2->PlayerPosition, *it))
-				{
-					stay = true;
-				}
+				grid[p2->posX][p2->posY] = "empty";
+				p1->posX--;
+				grid[p2->posX][p2->posY] = "player2";
 			}
-			*/
-			if (!stay) p2->PlayerPosition.x -= step;
 		}
 		else if (keyDown == SDLK_DOWN)
 		{
-			bool stay = false;
+			p2->moving = true;
 			frameTime = 0;
-			p2->PlayerRect.y = p2->PlayerRect.h* 2;
-			p2->PlayerRect.x += p2->PlayerRect.w;
-			if (p2->PlayerRect.x >= p2->PlayerRect.w * 3)
-				p2->PlayerRect.x = 0;
-			/*
-			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			p2->playerRect.y = p2->playerRect.h* 2;
+			p2->playerRect.x += p2->playerRect.w;
+			if (p2->playerRect.x >= p2->playerRect.w * 3)
+				p2->playerRect.x = 0;
+			p2->playerPosition.y += step;
+			if (p2->isInPosition())
 			{
-				if (isCollisioning(p2->PlayerPosition, *it))
-				{
-					stay = true;
-				}
+				grid[p2->posX][p2->posY] = "empty";
+				p1->posY++;
+				grid[p2->posX][p2->posY] = "player2";
 			}
-			*/
-			if (!stay) p2->PlayerPosition.y += step;
 		}
 		else if (keyDown == SDLK_RIGHT)
 		{
-			bool stay = false;
+			p2->moving = true;
 			frameTime = 0;
-			p2->PlayerRect.y = p2->PlayerRect.h* 3;
-			p2->PlayerRect.x += p2->PlayerRect.w;
-			if (p2->PlayerRect.x >= p2->PlayerRect.w * 3)
-				p2->PlayerRect.x = 0;
-			/*
-			for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+			p2->playerRect.y = p2->playerRect.h* 3;
+			p2->playerRect.x += p2->playerRect.w;
+			if (p2->playerRect.x >= p2->playerRect.w * 3)
+				p2->playerRect.x = 0;
+			p2->playerPosition.x += step;
+			if (p2->isInPosition())
 			{
-				if (isCollisioning(p2->PlayerPosition, *it))
-				{
-					stay = true;
-				}
+				grid[p2->posX][p2->posY] = "empty";
+				p1->posX++;
+				grid[p2->posX][p2->posY] = "player2";
 			}
-			*/
-			if (!stay) p2->PlayerPosition.x += step;
 		}
+
 		if (keyDown == SDLK_SPACE)
 		{
-			if(p1Bomb==nullptr) p1Bomb=p1->bomb();
+			if (p1->ptrBomb == nullptr)
+			{
+				setExplosionLimits(p1);
+				p1->bomb(explosionLimits);
+				restartExplosionLimits();
+			}
 		}
 		if (keyDown == SDLK_RCTRL)
 		{
-			if(p2Bomb==nullptr)  p2Bomb=p2->bomb();
+			if (p2->ptrBomb == nullptr)
+			{
+				setExplosionLimits(p2);
+				p2->bomb(explosionLimits);
+				restartExplosionLimits();
+			}
+		}
+
+		if (!p2->moving && p1->isInPosition())
+		{
+			p1->moving = false;
+			keyDown = NULL;
+		}
+
+		if (!p1->moving && p2->isInPosition())
+		{
+			p2->moving = false;
+			keyDown = NULL;
 		}
 	}
 
 	//Map Limits:
-	/*
-	if (isCollisioning(p1->PlayerRect, limitUp)) p1->PlayerPosition.y = limitUp.y;
-	if (isCollisioning(p1->PlayerRect, limitLeft)) p1->PlayerPosition.x = limitLeft.x;
-	if (isCollisioning(p1->PlayerRect, limitDown)) p1->PlayerPosition.y = limitDown.y;
-	if (isCollisioning(p1->PlayerRect, limitRight)) p1->PlayerPosition.x = limitRight.x;
+	if (p1->playerPosition.x >= SCREEN_WIDTH - SCREEN_WIDTH / 15 * 2)
+	{
+		p1->playerPosition.x = SCREEN_WIDTH - SCREEN_WIDTH / 15 * 2;
+		p1->moving = false;
+	}
+	if (p1->playerPosition.x < SCREEN_WIDTH / 15)
+	{
+		p1->playerPosition.x = SCREEN_WIDTH / 15;
+		p1->moving = false;
+	}
+		
+	if (p1->playerPosition.y < (SCREEN_HEIGHT - 80) / 13 + 80)
+	{
+		p1->playerPosition.y = (SCREEN_HEIGHT - 80) / 13 + 80;
+		p1->moving = false;
+	}
+		
+	if (p1->playerPosition.y > SCREEN_HEIGHT - ((SCREEN_HEIGHT - 80) / 13 + 80))
+	{
+		p1->playerPosition.y = SCREEN_HEIGHT - ((SCREEN_HEIGHT - 80) / 13 + 80);
+		p1->moving = false;
+	}
+		
 
-	if (isCollisioning(p2->PlayerRect, limitUp)) p2->PlayerPosition.y = limitUp.y;
-	if (isCollisioning(p2->PlayerRect, limitLeft)) p2->PlayerPosition.x = limitLeft.x;
-	if (isCollisioning(p2->PlayerRect, limitDown)) p2->PlayerPosition.y = limitDown.y;
-	if (isCollisioning(p2->PlayerRect, limitRight)) p2->PlayerPosition.x = limitRight.x;
-	*/
-	if (p1->PlayerPosition.x >= SCREEN_WIDTH - SCREEN_WIDTH/15*2) p1->PlayerPosition.x = SCREEN_WIDTH - SCREEN_WIDTH / 15*2;
-	if (p1->PlayerPosition.x <= SCREEN_WIDTH / 15) p1->PlayerPosition.x = SCREEN_WIDTH / 15;
-	if (p1->PlayerPosition.y <= SCREEN_HEIGHT / 15 + 80) p1->PlayerPosition.y = SCREEN_HEIGHT / 15 + 80;
-	if (p1->PlayerPosition.y >= SCREEN_HEIGHT - (SCREEN_HEIGHT / 15)*2) p1->PlayerPosition.y = SCREEN_HEIGHT - (SCREEN_HEIGHT / 15) * 2;
-
-	if (p2->PlayerPosition.x >= SCREEN_WIDTH - SCREEN_WIDTH / 15*2) p2->PlayerPosition.x = SCREEN_WIDTH - SCREEN_WIDTH / 15*2;
-	if (p2->PlayerPosition.x <= SCREEN_WIDTH / 15) p2->PlayerPosition.x = SCREEN_WIDTH / 15;
-	if (p2->PlayerPosition.y <= SCREEN_HEIGHT / 15 + 80 ) p2->PlayerPosition.y = SCREEN_HEIGHT / 15 + 80;
-	if (p2->PlayerPosition.y >= SCREEN_HEIGHT - (SCREEN_HEIGHT / 15) * 2) p2->PlayerPosition.y = SCREEN_HEIGHT - (SCREEN_HEIGHT / 15) * 2;
+	if (p2->playerPosition.x > SCREEN_WIDTH - SCREEN_WIDTH / 15 * 2)
+	{
+		p2->playerPosition.x = SCREEN_WIDTH - SCREEN_WIDTH / 15 * 2;
+		p2->moving = false;
+	}
+		
+	if (p2->playerPosition.x < SCREEN_WIDTH / 15)
+	{
+		p2->playerPosition.x = SCREEN_WIDTH / 15;
+		p2->moving = false;
+	}
+	if (p2->playerPosition.y < (SCREEN_HEIGHT - 80) / 13 + 80)
+	{
+		p2->playerPosition.y = (SCREEN_HEIGHT - 80) / 13 + 80;
+		p2->moving = false;
+	}
+	if (p2->playerPosition.y > SCREEN_HEIGHT - ((SCREEN_HEIGHT - 80) / 13 + 80))
+	{
+		p2->playerPosition.y = SCREEN_HEIGHT - ((SCREEN_HEIGHT - 80) / 13 + 80);
+		p2->moving = false;
+	}
 
 	//Blocks Collisions:
 	for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
 	{
-		if (isCollisioning(p1->PlayerPosition, *it))
+		if (isCollisioning(p1->playerPosition, *it))
 		{
 			if (keyDown == SDLK_w)
 			{
-				p1->PlayerPosition.y += step;
+				p1->playerPosition.y += step;
+				p1->moving = false;
 
 			}
 			else if (keyDown == SDLK_a)
 			{
-				p1->PlayerPosition.x += step;
-
+				p1->playerPosition.x += step;
+				p1->moving = false;
 			}
 			else if (keyDown == SDLK_s)
 			{
-				p1->PlayerPosition.y -= step;
+				p1->playerPosition.y -= step;
+				p1->moving = false;
 			}
 
 			else if (keyDown == SDLK_d)
 			{
-				p1->PlayerPosition.x -= step;
+				p1->playerPosition.x -= step;
+				p1->moving = false;
 			}
 		}
-		if (isCollisioning(p2->PlayerPosition, *it))
+		if (isCollisioning(p2->playerPosition, *it))
 		{
 			if (keyDown == SDLK_UP)
 			{
-				p2->PlayerPosition.y += step;
+				p2->playerPosition.y += step;
+				p2->moving = false;
 			}
 			else if (keyDown == SDLK_LEFT)
 			{
-				p2->PlayerPosition.x += step;
+				p2->playerPosition.x += step;
+				p2->moving = false;
 			}
 			else if (keyDown == SDLK_DOWN)
 			{
-				p2->PlayerPosition.y -= step;
+				p2->playerPosition.y -= step;
+				p2->moving = false;
 			}
 			else if (keyDown == SDLK_RIGHT)
 			{
-				p2->PlayerPosition.x -= step;
+				p2->playerPosition.x -= step;
+				p2->moving = false;
 			}
 		}
 	}
-	
-	
 
 	//Bombs:
-	if (p1Bomb != nullptr)
+	if (p1->ptrBomb != nullptr)
 	{
-		if (!p1Bomb->end)
+		if (!p1->ptrBomb->end)
 		{
-			p1Bomb->Update();
+			p1->ptrBomb->Update();
+			if (p1->ptrBomb->explode)
+			{
+				checkDamage(p1->ptrBomb);	
+			}
 		}
-		if (p1Bomb->end)
+		if (p1->ptrBomb->end)
 		{
-			delete p1Bomb;
-			p1Bomb = nullptr;
+			delete p1->ptrBomb;
+			p1->ptrBomb = nullptr;
 		}
 	}
 	
-	if (p2Bomb != nullptr)
+	if (p2->ptrBomb != nullptr)
 	{
-		if (!p2Bomb->end)
+		if (!p2->ptrBomb->end)
 		{
-			p2Bomb->Update();
+			p2->ptrBomb->Update();
+			checkDamage(p2->ptrBomb);
 		}
-		if (p2Bomb->end)
+		if (p2->ptrBomb->end)
 		{
-			delete p2Bomb;
-			p2Bomb = nullptr;
+			delete p2->ptrBomb;
+			p2->ptrBomb = nullptr;
 		}
 	}
 }
@@ -316,33 +369,233 @@ void Level::Draw()
 	Renderer::Instance()->PushImage(LEVEL_BG, { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT });
 
 	//Blocks:
-	for (int i = 1; i <= 6; i++)
+	for (int i = 1; i <= 11; i+=2)
 	{
-		for (int j = 1; j <= 5; j++)
+		for (int j = 1; j <= 9; j+=2)
 		{
-			SDL_Rect blockPosition = { static_cast<int>((SCREEN_WIDTH / 15)* (2 * i)), static_cast<int>(((SCREEN_HEIGHT -80)/ 13)* (2 * j)+80), 48,48 };
+			SDL_Rect blockPosition = { static_cast<int>((SCREEN_WIDTH / 15)* (i+1)), static_cast<int>(((SCREEN_HEIGHT - 80) / 13)* (j+1) + 80), 48,48 };
 			Renderer::Instance()->PushSprite(ITEMS, blockRect, blockPosition);
-			//blockPosition.x += 20;
-			//blockPosition.y += 2;
-			//blockPosition.w -= 2;
-			//blockPosition.h -= 5;
 			blockList.push_back(blockPosition);
+			grid[i][j] = "block";
 		}
 	}
-
 	//Bombs:
-	if (p1Bomb != nullptr && !p1Bomb->end)
+	if (p1->ptrBomb != nullptr && !p1->ptrBomb->end)
 	{
-		p1Bomb->Draw();
+		p1->ptrBomb->Draw();
 	}
-	if (p2Bomb != nullptr && !p2Bomb->end)
+	if (p2->ptrBomb != nullptr && !p2->ptrBomb->end)
 	{
-		p2Bomb->Draw();
+		p2->ptrBomb->Draw();
 	}
 
 	//Animated Sprite
-	Renderer::Instance()->PushSprite(PLAYER1_SPRITE, p1->PlayerRect, p1->PlayerPosition);
-	Renderer::Instance()->PushSprite(PLAYER2_SPRITE, p2->PlayerRect, p2->PlayerPosition);
+	Renderer::Instance()->PushSprite(PLAYER1_SPRITE, p1->playerRect, p1->playerPosition);
+	Renderer::Instance()->PushSprite(PLAYER2_SPRITE, p2->playerRect, p2->playerPosition);
 	
 	Renderer::Instance()->Render();
+}
+
+void Level::setExplosionLimits(Player *p)
+{
+	if (p->posY - 2 >= 0 && grid[p->posX][p->posY - 2] != "block")
+	{
+		explosionLimits[0] = true;
+		explosionLimits[1] = true;
+	}
+	else if (p->posY - 1 >= 0 && grid[p->posX][p->posY - 1] != "block")
+	{
+		explosionLimits[1] = true;
+	}
+	if (p->posY + 2 <= 10 && grid[p->posX][p->posY + 2] != "block")
+	{
+		explosionLimits[6] = true;
+		explosionLimits[7] = true;
+	}
+	else if (p->posY + 1 <= 10 && grid[p->posX][p->posY + 1] != "block")
+	{
+		explosionLimits[6] = true;
+	}
+	if (p->posX - 2 >= 0 && grid[p->posX - 2][p->posY] != "block")
+	{
+		explosionLimits[2] = true;
+		explosionLimits[3] = true;
+	}
+	else if (p->posX - 1 >= 0 && grid[p->posX - 1][p->posY] != "block")
+	{
+		explosionLimits[2] = true;
+	}
+	if (p->posX + 2 <= 12 && grid[p->posX + 2][p->posY] != "block")
+	{
+		explosionLimits[4] = true;
+		explosionLimits[5] = true;
+	}
+	else if (p->posX + 1 <= 12 && grid[p->posX + 1][p->posY] != "block")
+	{
+		explosionLimits[4] = true;
+	}
+}
+
+void Level::restartExplosionLimits()
+{
+	for (int i = 0; i <= 7; i++)
+	{
+		explosionLimits[i] = false;
+	}
+}
+
+void Level::checkDamage(Bomb *p)
+{
+	if (explosionLimits[0])
+	{
+		if (grid[p->posX][p->posY - 2] == "player1")
+		{
+			p1->lives--;
+			p2->points += 100;
+			grid[p->posX][p->posY - 2] = "empty";
+		}
+		else if (grid[p->posX][p->posY - 2] == "player2")
+		{
+			p2->lives--;
+			p1->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "wall")
+		{
+			p->points += 15;
+			//destroy wall
+		}
+
+	}
+	if (explosionLimits[1] = true)
+	{
+		if (grid[p->posX][p->posY - 2] == "player1")
+		{
+			p1->lives--;
+			p2->points += 100;
+			grid[p->posX][p->posY - 2] = "empty"
+		}
+		else if (grid[p->posX][p->posY - 2] == "player2")
+		{
+			p2->lives--;
+			p1->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "wall")
+		{
+			p->points += 15;
+			//destroy wall
+		}
+	}
+	if (explosionLimits[2] = true)
+	{
+		if (grid[p->posX][p->posY - 2] == "player1")
+		{
+			p1->lives--;
+			p2->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "player2")
+		{
+			p2->lives--;
+			p1->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "wall")
+		{
+			p->points += 15;
+			//destroy wall
+		}
+	}
+	if (explosionLimits[3] = true)
+	{
+		if (grid[p->posX][p->posY - 2] == "player1")
+		{
+			p1->lives--;
+			p2->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "player2")
+		{
+			p2->lives--;
+			p1->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "wall")
+		{
+			p->points += 15;
+			//destroy wall
+		}
+	}
+	if (explosionLimits[4] = true)
+	{
+		if (grid[p->posX][p->posY - 2] == "player1")
+		{
+			p1->lives--;
+			p2->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "player2")
+		{
+			p2->lives--;
+			p1->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "wall")
+		{
+			p->points += 15;
+			//destroy wall
+		}
+	}
+	if (explosionLimits[5] = true)
+	{
+		if (grid[p->posX][p->posY - 2] == "player1")
+		{
+			p1->lives--;
+			p2->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "player2")
+		{
+			p2->lives--;
+			p1->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "wall")
+		{
+			p->points += 15;
+			//destroy wall
+		}
+	}
+	if (explosionLimits[6] = true)
+	{
+		if (grid[p->posX][p->posY - 2] == "player1")
+		{
+			p1->lives--;
+			p2->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "player2")
+		{
+			p2->lives--;
+			p1->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "wall")
+		{
+			p->points += 15;
+			//destroy wall
+		}
+	}
+	if (explosionLimits[7] = true)
+	{
+		if (grid[p->posX][p->posY - 2] == "player1")
+		{
+			p1->lives--;
+			p2->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "player2")
+		{
+			p2->lives--;
+			p1->points += 100;
+		}
+		else if (grid[p->posX][p->posY - 2] == "wall")
+		{
+			p->points += 15;
+			//destroy wall
+		}
+	}
+	
+	
+
+	
+	
 }

@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(int num): playerTag{ num }, ptrBomb{nullptr}
+Player::Player(int num): playerTag{ num }, ptrBomb{nullptr}, moving{false}
 {
 	Renderer::Instance()->LoadTexture(PLAYER1_SPRITE, PATH_IMG + "player1.png");
 	Renderer::Instance()->LoadTexture(PLAYER2_SPRITE, PATH_IMG + "player2.png");
@@ -10,16 +10,16 @@ Player::Player(int num): playerTag{ num }, ptrBomb{nullptr}
 	frameWidth = textWidth / 3;
 	frameHeight = textHeight / 4;
 	//per tant tots dos tenen el mateix PlayerRect.
-	PlayerRect = { 0,0,frameWidth,frameHeight};
+	playerRect = { 0,0,frameWidth,frameHeight};
 
 	//només canvia el punt inicial x,y.
 	if (num == 1)
 	{
-		PlayerPosition = { SCREEN_WIDTH/15,  (SCREEN_HEIGHT - 80) / 13 * 6 + 80, 48, 48 };
+		playerPosition = { SCREEN_WIDTH/15,  (SCREEN_HEIGHT - 80) / 13 * 6 + 80, 48, 48 };
 	}
 	else if (num == 2)
 	{
-		PlayerPosition = { SCREEN_WIDTH- SCREEN_WIDTH / 15 * 2,  (SCREEN_HEIGHT - 80) / 13*6 + 80, 48, 48 };
+		playerPosition = { SCREEN_WIDTH- SCREEN_WIDTH / 15 * 2,  (SCREEN_HEIGHT - 80) / 13*6 + 80, 48, 48 };
 	}
 }
 
@@ -32,9 +32,19 @@ int Player::getPlayerTag()
 	return playerTag;
 }
 
-Bomb* Player::bomb()
+void Player::bomb(bool explodingLimits[8])
 {
-	ptrBomb = new Bomb(PlayerPosition);
-	return ptrBomb;
+	ptrBomb = new Bomb(playerPosition, explodingLimits);
+
+}
+
+bool Player::isInPosition()
+{
+	if (((playerPosition.x % (SCREEN_WIDTH / 15)) == 0) && (((playerPosition.y - 80) % ((SCREEN_HEIGHT - 80) / 13)== 0)))
+	{
+		return true;
+	}
+	else 
+		return false;
 }
 

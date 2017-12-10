@@ -8,23 +8,19 @@
 class Bomb
 {
 public:
-	Bomb(SDL_Rect pos);
+	Bomb(SDL_Rect pos, bool explosionLimits[8]);
 	~Bomb();
-	bool end;
+	bool end, explode;
 	void Update();
 	void Draw();
+	int posX, posY;
 
 private:
 	int textWidth, textHeight, frameWidth, frameHeight, frameTime;
-	SDL_Rect bombRect, bombPosition, explosionRect;
-	bool explode;
-	void explodingLimits();
+	SDL_Rect bombRect, bombPosition, centralExplosionRect, explosion0Rect, explosion1Rect, explosion2Rect, explosion3Rect, explosion4Rect, explosion5Rect, explosion6Rect, explosion7Rect;
+	bool explodingLimits[8];
 
 	//TIME:
-	//std::chrono::steady_clock start_time;
-	//std::chrono::steady_clock current_time;
 	time_t start;
-
-
 };
 

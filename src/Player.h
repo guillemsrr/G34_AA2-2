@@ -12,10 +12,13 @@ public:
 	Player(int num);
 	~Player();
 	int getPlayerTag();
-	SDL_Rect PlayerPosition, PlayerRect;
-	Bomb* bomb();
+	SDL_Rect playerPosition, playerRect;
+	void bomb(bool explodingLimits[8]);
 	Bomb *ptrBomb;
+	bool isInPosition();
+	bool moving;
+	int posX, posY, lives, points;
 
 private:
-	int points, playerTag, textWidth, textHeight, frameWidth, frameHeight, frameTime;
+	int playerTag, textWidth, textHeight, frameWidth, frameHeight, frameTime;
 };
