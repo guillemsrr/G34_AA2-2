@@ -2,7 +2,9 @@
 #include "Scene.h"
 #include "Player.h"
 #include <list>
+#include "HUD.h"
 #define SPEED 10
+
 class Level :
 	public Scene
 {
@@ -26,6 +28,7 @@ private:
 	bool explosionLimits[8];
 	void setExplosionLimits(Player *p);
 	void restartExplosionLimits();
-	void checkDamage(Bomb *b);
+	void checkDamage(Player *p);
+	HUD *m_hud;
 };
 

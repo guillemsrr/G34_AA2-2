@@ -18,6 +18,7 @@ public:
 		GoToLevel1,
 		GoToLevel2,
 		GoToRanking,
+		GoToMenu,
 		Exit
 	};
 

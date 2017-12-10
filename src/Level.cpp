@@ -1,6 +1,6 @@
 #include "Level.h"
 
-Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, step{ 16 }
+Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, step{ 16 }, m_hud{new HUD(p1, p2)}
 {
 	m_sceneState= Scene::SceneState::Running;
 	Renderer::Instance()->LoadTexture(LEVEL_BG, PATH_IMG + "bgGame.jpg");
@@ -63,6 +63,9 @@ void Level::EventHandler()
 void Level::Update()
 {
 	if (exit) m_sceneState = Scene::SceneState::Exit;
+	if(m_hud->timer<=0) m_sceneState = Scene::SceneState::GoToRanking;
+
+	//Movement:
 	frameTime++;
 	if (SCREEN_FPS / frameTime <= SPEED)
 	{
@@ -336,7 +339,7 @@ void Level::Update()
 			p1->ptrBomb->Update();
 			if (p1->ptrBomb->explode)
 			{
-				checkDamage(p1->ptrBomb);	
+				checkDamage(p1);	
 			}
 		}
 		if (p1->ptrBomb->end)
@@ -351,7 +354,10 @@ void Level::Update()
 		if (!p2->ptrBomb->end)
 		{
 			p2->ptrBomb->Update();
-			checkDamage(p2->ptrBomb);
+			if (p2->ptrBomb->explode)
+			{
+				checkDamage(p2);
+			}
 		}
 		if (p2->ptrBomb->end)
 		{
@@ -359,6 +365,9 @@ void Level::Update()
 			p2->ptrBomb = nullptr;
 		}
 	}
+
+	//HUD:
+	m_hud->Update();
 }
 
 void Level::Draw()
@@ -393,6 +402,9 @@ void Level::Draw()
 	Renderer::Instance()->PushSprite(PLAYER1_SPRITE, p1->playerRect, p1->playerPosition);
 	Renderer::Instance()->PushSprite(PLAYER2_SPRITE, p2->playerRect, p2->playerPosition);
 	
+	//HUD:
+	m_hud->Draw();
+
 	Renderer::Instance()->Render();
 }
 
@@ -444,158 +456,175 @@ void Level::restartExplosionLimits()
 	}
 }
 
-void Level::checkDamage(Bomb *p)
+void Level::checkDamage(Player *p)
 {
 	if (explosionLimits[0])
 	{
-		if (grid[p->posX][p->posY - 2] == "player1")
+		if (grid[p->ptrBomb->posX][p->ptrBomb->posY - 2] == "player1")
 		{
 			p1->lives--;
-			p2->points += 100;
-			grid[p->posX][p->posY - 2] = "empty";
+			if(p->getPlayerTag() == 2) p2->points += 100;
+			grid[p->ptrBomb->posX][p->ptrBomb->posY - 2] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "player2")
+		else if (grid[p->ptrBomb->posX][p->ptrBomb->posY - 2] == "player2")
 		{
 			p2->lives--;
-			p1->points += 100;
+			if (p->getPlayerTag() == 1) p1->points += 100;
+			grid[p->ptrBomb->posX][p->ptrBomb->posY - 2] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "wall")
+		else if (grid[p->ptrBomb->posX][p->ptrBomb->posY - 2] == "wall")
 		{
 			p->points += 15;
 			//destroy wall
+			grid[p->ptrBomb->posX][p->ptrBomb->posY - 2] = "empty";
 		}
+	}
+	if (explosionLimits[1])
+	{
+		if (grid[p->ptrBomb->posX][p->ptrBomb->posY - 1] == "player1")
+		{
+			p1->lives--;
+			if (p->getPlayerTag() == 2) p2->points += 100;
+			grid[p->ptrBomb->posX][p->ptrBomb->posY - 1] = "empty";
+		}
+		else if (grid[p->ptrBomb->posX][p->ptrBomb->posY - 1] == "player2")
+		{
+			p2->lives--;
+			if (p->getPlayerTag() == 1) p1->points += 100;
+			grid[p->ptrBomb->posX][p->ptrBomb->posY - 1] = "empty";
+		}
+		else if (grid[p->ptrBomb->posX][p->ptrBomb->posY - 1] == "wall")
+		{
+			p->points += 15;
+			//destroy wall
+			grid[p->ptrBomb->posX][p->ptrBomb->posY - 1] = "empty";
+		}
+	}
+	if (explosionLimits[2])
+	{
 
-	}
-	if (explosionLimits[1] = true)
-	{
-		if (grid[p->posX][p->posY - 2] == "player1")
+		if (grid[p->ptrBomb->posX-1][p->ptrBomb->posY] == "player1")
 		{
 			p1->lives--;
-			p2->points += 100;
-			grid[p->posX][p->posY - 2] = "empty"
+			if (p->getPlayerTag() == 2) p2->points += 100;
+			grid[p->ptrBomb->posX-1][p->ptrBomb->posY] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "player2")
+		else if (grid[p->ptrBomb->posX-1][p->ptrBomb->posY] == "player2")
 		{
 			p2->lives--;
-			p1->points += 100;
+			if (p->getPlayerTag() == 1) p1->points += 100;
+			grid[p->ptrBomb->posX - 1][p->ptrBomb->posY] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "wall")
+		else if (grid[p->ptrBomb->posX-1][p->ptrBomb->posY] == "wall")
 		{
 			p->points += 15;
 			//destroy wall
+			grid[p->ptrBomb->posX - 1][p->ptrBomb->posY] = "empty";
 		}
 	}
-	if (explosionLimits[2] = true)
+	if (explosionLimits[3])
 	{
-		if (grid[p->posX][p->posY - 2] == "player1")
+		if (grid[p->ptrBomb->posX - 2][p->ptrBomb->posY] == "player1")
 		{
 			p1->lives--;
-			p2->points += 100;
+			if (p->getPlayerTag() == 2) p2->points += 100;
+			grid[p->ptrBomb->posX - 2][p->ptrBomb->posY] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "player2")
+		else if (grid[p->ptrBomb->posX -2][p->ptrBomb->posY] == "player2")
 		{
 			p2->lives--;
-			p1->points += 100;
+			if (p->getPlayerTag() == 1) p1->points += 100;
+			grid[p->ptrBomb->posX - 2][p->ptrBomb->posY] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "wall")
+		else if (grid[p->ptrBomb->posX - 2][p->ptrBomb->posY] == "wall")
 		{
 			p->points += 15;
 			//destroy wall
+			grid[p->ptrBomb->posX - 2][p->ptrBomb->posY] = "empty";
 		}
 	}
-	if (explosionLimits[3] = true)
+	if (explosionLimits[4])
 	{
-		if (grid[p->posX][p->posY - 2] == "player1")
+		if (grid[p->ptrBomb->posX + 1][p->ptrBomb->posY] == "player1")
 		{
 			p1->lives--;
-			p2->points += 100;
+			if (p->getPlayerTag() == 2) p2->points += 100;
+			grid[p->ptrBomb->posX + 1][p->ptrBomb->posY] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "player2")
+		else if (grid[p->ptrBomb->posX + 1][p->ptrBomb->posY] == "player2")
 		{
 			p2->lives--;
-			p1->points += 100;
+			if (p->getPlayerTag() == 1) p1->points += 100;
+			grid[p->ptrBomb->posX + 1][p->ptrBomb->posY] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "wall")
+		else if (grid[p->ptrBomb->posX + 1][p->ptrBomb->posY] == "wall")
 		{
 			p->points += 15;
 			//destroy wall
+			grid[p->ptrBomb->posX + 1][p->ptrBomb->posY] = "empty";
 		}
 	}
-	if (explosionLimits[4] = true)
+	if (explosionLimits[5])
 	{
-		if (grid[p->posX][p->posY - 2] == "player1")
+		if (grid[p->ptrBomb->posX + 2][p->ptrBomb->posY] == "player1")
 		{
 			p1->lives--;
-			p2->points += 100;
+			if (p->getPlayerTag() == 2) p2->points += 100;
+			grid[p->ptrBomb->posX + 2][p->ptrBomb->posY] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "player2")
+		else if (grid[p->ptrBomb->posX + 2][p->ptrBomb->posY] == "player2")
 		{
 			p2->lives--;
-			p1->points += 100;
+			if (p->getPlayerTag() == 1) p1->points += 100;
+			grid[p->ptrBomb->posX + 2][p->ptrBomb->posY] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "wall")
+		else if (grid[p->ptrBomb->posX + 2][p->ptrBomb->posY] == "wall")
 		{
 			p->points += 15;
 			//destroy wall
+			grid[p->ptrBomb->posX + 2][p->ptrBomb->posY] = "empty";
 		}
 	}
-	if (explosionLimits[5] = true)
+	if (explosionLimits[6])
 	{
-		if (grid[p->posX][p->posY - 2] == "player1")
+		if (grid[p->ptrBomb->posX][p->ptrBomb->posY + 1] == "player1")
 		{
 			p1->lives--;
-			p2->points += 100;
+			if (p->getPlayerTag() == 2) p2->points += 100;
+			grid[p->ptrBomb->posX][p->ptrBomb->posY + 1] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "player2")
+		else if (grid[p->ptrBomb->posX][p->ptrBomb->posY + 1] == "player2")
 		{
 			p2->lives--;
-			p1->points += 100;
+			if (p->getPlayerTag() == 1) p1->points += 100;
+			grid[p->ptrBomb->posX][p->ptrBomb->posY - 1] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "wall")
+		else if (grid[p->ptrBomb->posX][p->ptrBomb->posY + 1] == "wall")
 		{
 			p->points += 15;
 			//destroy wall
+			grid[p->ptrBomb->posX][p->ptrBomb->posY + 1] = "empty";
 		}
 	}
-	if (explosionLimits[6] = true)
+	if (explosionLimits[7])
 	{
-		if (grid[p->posX][p->posY - 2] == "player1")
+		if (grid[p->ptrBomb->posX][p->ptrBomb->posY + 2] == "player1")
 		{
 			p1->lives--;
-			p2->points += 100;
+			if (p->getPlayerTag() == 2) p2->points += 100;
+			grid[p->ptrBomb->posX][p->ptrBomb->posY + 2] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "player2")
+		else if (grid[p->ptrBomb->posX][p->ptrBomb->posY - 2] == "player2")
 		{
 			p2->lives--;
-			p1->points += 100;
+			if (p->getPlayerTag() == 1) p1->points += 100;
+			grid[p->ptrBomb->posX][p->ptrBomb->posY + 2] = "empty";
 		}
-		else if (grid[p->posX][p->posY - 2] == "wall")
+		else if (grid[p->ptrBomb->posX][p->ptrBomb->posY + 2] == "wall")
 		{
 			p->points += 15;
 			//destroy wall
+			grid[p->ptrBomb->posX][p->ptrBomb->posY + 2] = "empty";
 		}
-	}
-	if (explosionLimits[7] = true)
-	{
-		if (grid[p->posX][p->posY - 2] == "player1")
-		{
-			p1->lives--;
-			p2->points += 100;
-		}
-		else if (grid[p->posX][p->posY - 2] == "player2")
-		{
-			p2->lives--;
-			p1->points += 100;
-		}
-		else if (grid[p->posX][p->posY - 2] == "wall")
-		{
-			p->points += 15;
-			//destroy wall
-		}
-	}
-	
-	
-
-	
-	
+	}	
 }

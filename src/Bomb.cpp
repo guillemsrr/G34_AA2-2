@@ -33,7 +33,6 @@ Bomb::Bomb(SDL_Rect pos, bool explosionLimits[8]): bombPosition{pos}, explode{fa
 		explodingLimits[i] = explosionLimits[i];
 	}
 	//comencem el temps:
-	//start_time.now();
 	start = time(0);
 }
 

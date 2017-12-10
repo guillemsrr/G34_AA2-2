@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(int num): playerTag{ num }, ptrBomb{nullptr}, moving{false}
+Player::Player(int num): playerTag{ num }, ptrBomb{nullptr}, moving{false}, lives{3}, points{0}
 {
 	Renderer::Instance()->LoadTexture(PLAYER1_SPRITE, PATH_IMG + "player1.png");
 	Renderer::Instance()->LoadTexture(PLAYER2_SPRITE, PATH_IMG + "player2.png");
