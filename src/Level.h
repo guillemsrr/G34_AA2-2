@@ -2,7 +2,10 @@
 #include "Scene.h"
 #include "Player.h"
 #include <list>
+#include <vector>
 #include "HUD.h"
+#include "Wall.h"
+
 #define SPEED 10
 
 class Level :
@@ -29,6 +32,13 @@ private:
 	void setExplosionLimits(Player *p);
 	void restartExplosionLimits();
 	void checkDamage(Player *p);
+	void changePlayerLocation(Player *p);
 	HUD *m_hud;
+	Wall *w;
+	std::list<Wall*> wallList;
+	void detectWall(int x, int y);
+
+
+
 };
 

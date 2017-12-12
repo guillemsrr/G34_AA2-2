@@ -34,7 +34,7 @@ int Player::getPlayerTag()
 
 void Player::bomb(bool explodingLimits[8])
 {
-	ptrBomb = new Bomb(playerPosition, explodingLimits);
+	ptrBomb = new Bomb(posI,posJ,playerPosition, explodingLimits);
 
 }
 

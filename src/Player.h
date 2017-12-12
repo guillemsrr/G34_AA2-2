@@ -17,7 +17,7 @@ public:
 	Bomb *ptrBomb;
 	bool isInPosition();
 	bool moving;
-	int posX, posY, lives, points;
+	int posJ, posI, lives, points;
 
 private:
 	int playerTag, textWidth, textHeight, frameWidth, frameHeight, frameTime;

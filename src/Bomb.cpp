@@ -1,10 +1,8 @@
 #include "Bomb.h"
 #define SPEED 10
 
-Bomb::Bomb(SDL_Rect pos, bool explosionLimits[8]): bombPosition{pos}, explode{false}, end{false}
+Bomb::Bomb(int x, int y, SDL_Rect pos, bool explosionLimits[8]): bombPosition{pos}, explode{false}, end{false}, posI{x}, posJ{y}
 {
-	posX = pos.x;
-	posY = pos.y;
 	Renderer::Instance()->LoadTexture(ITEMS, PATH_IMG + "items.png");
 	textWidth = Renderer::Instance()->GetTextureSize(ITEMS).x;
 	textHeight = Renderer::Instance()->GetTextureSize(ITEMS).y;

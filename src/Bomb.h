@@ -8,12 +8,12 @@
 class Bomb
 {
 public:
-	Bomb(SDL_Rect pos, bool explosionLimits[8]);
+	Bomb(int x, int y,SDL_Rect pos, bool explosionLimits[8]);
 	~Bomb();
 	bool end, explode;
 	void Update();
 	void Draw();
-	int posX, posY;
+	int posI, posJ;
 
 private:
 	int textWidth, textHeight, frameWidth, frameHeight, frameTime;
