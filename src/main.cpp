@@ -3,7 +3,7 @@
 
 #undef main
 
-int main()
+int main(int, char*[])
 {
 	try
 	{

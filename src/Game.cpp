@@ -82,6 +82,18 @@ void Game::run()
 				break;
 			}
 			break;
+		case Scene::SceneState::GoToMenu: //en realitat no caldria fer un switch pq sempre es cridarà al Menu? O per si de cas?
+			switch (m_gameState)
+			{
+			case GameState::RANKING:
+				delete m_currentScene;
+				m_currentScene = new Menu();
+				m_gameState = GameState::MENU;
+				break;
+			default:
+				break;
+			}
+			break;
 		default:
 			break;
 		}

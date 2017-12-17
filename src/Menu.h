@@ -12,7 +12,6 @@ public:
 	void Update() override;
 	void Draw() override; 
 
-
 private:
 	static constexpr SDL_Rect level1Rect = { static_cast<int>(SCREEN_WIDTH / 2.5),static_cast<int>(SCREEN_HEIGHT - (SCREEN_HEIGHT / 5 )*5),137,81 };
 	static constexpr SDL_Rect level2Rect = { static_cast<int>(SCREEN_WIDTH / 2.5),static_cast<int>(SCREEN_HEIGHT - (SCREEN_HEIGHT / 5) * 4),137,81 };
