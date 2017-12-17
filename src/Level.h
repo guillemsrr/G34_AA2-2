@@ -5,6 +5,7 @@
 #include <vector>
 #include "HUD.h"
 #include "Wall.h"
+#include "Grid.h"
 
 #define SPEED 10
 
@@ -37,8 +38,5 @@ private:
 	Wall *w;
 	std::list<Wall*> wallList;
 	void detectWall(int x, int y);
-
-
-
 };
 
