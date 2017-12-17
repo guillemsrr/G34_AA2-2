@@ -8,7 +8,7 @@ Menu::Menu() :hoverLevel1{ false }, hoverLevel2{ false }, hoverRanking{ false },
 	mouseRect.h = 0;
 
 	Renderer::Instance()->LoadFont({ SAIYAN, PATH_FONT + "saiyan.ttf", 80 });
-	Renderer::Instance()->LoadTexture(MENU_BG, PATH_IMG + "Bomberman_2.jpg");
+	//Renderer::Instance()->LoadTexture(MENU_BG, PATH_IMG + "Bomberman_2.jpg");
 	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL1, "LEVEL ONE",{ 0, 100, 0, 255 } ,SCREEN_WIDTH / 2, 81 });
 	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL1_HOVER, "LEVEL ONE",{ 0,200,0,255 } ,SCREEN_WIDTH / 2,81 });
 	Renderer::Instance()->LoadTextureText(SAIYAN, { MENU_TEXT_BUTTON_LEVEL2, "LEVEL TWO",{ 0,150,0,255 } ,SCREEN_WIDTH / 2,81 });
@@ -27,7 +27,7 @@ Menu::Menu() :hoverLevel1{ false }, hoverLevel2{ false }, hoverRanking{ false },
 void Menu::Draw()
 {
 	Renderer::Instance()->Clear();
-	Renderer::Instance()->PushImage(MENU_BG, { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT });
+	//Renderer::Instance()->PushImage(MENU_BG, { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT });
 	if (hoverLevel1) 
 	{
 		Renderer::Instance()->PushImage(MENU_TEXT_BUTTON_LEVEL1_HOVER, level1Rect);

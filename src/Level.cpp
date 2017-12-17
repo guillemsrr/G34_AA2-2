@@ -2,9 +2,6 @@
 
 Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, step{ 16 }, m_hud{new HUD(p1, p2)}
 {
-	std::cout << "start" << std::endl;
-	std::cout << "start" << std::endl;
-
 	m_sceneState= Scene::SceneState::Running;
 	Renderer::Instance()->LoadTexture(LEVEL_BG, PATH_IMG + "bgGame.jpg");
 	Renderer::Instance()->LoadTexture(ITEMS, PATH_IMG + "items.png");
