@@ -1,4 +1,5 @@
 #pragma once
+#include "GameObject.h"
 #include "Scene.h"
 #include <SDL.h>
 #include <SDL_image.h>
@@ -6,7 +7,8 @@
 #include <SDL_ttf.h>
 #include "Bomb.h"
 
-class Player
+class Player//:
+	//public GameObject//caldria fer que també fes ell mateix Update i Draw
 {
 public:
 	Player(int num);

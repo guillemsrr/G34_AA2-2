@@ -1,18 +1,20 @@
 #pragma once
+#include "GameObject.h"
 #include "SDL.h"
 #include "Renderer.h"
 #include <time.h>
 #include <chrono>
 #include <iostream>
 
-class Bomb
+class Bomb:
+	public GameObject
 {
 public:
 	Bomb(int x, int y,SDL_Rect pos, bool explosionLimits[8]);
 	~Bomb();
 	bool end, explode;
-	void Update();
-	void Draw();
+	virtual void Update() override;
+	virtual void Draw() override;
 	int posI, posJ;
 
 private:

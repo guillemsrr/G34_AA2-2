@@ -1,7 +1,7 @@
 #pragma once
 #include "Renderer.h"
 
-class GameObject //falta implementar les altres classes pq heredin d'aquesta.
+class GameObject //les classes que tinguin Update i Draw hereden d'aquesta classe interfaç
 {
 public:
 	GameObject();
