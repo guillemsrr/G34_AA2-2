@@ -5,8 +5,10 @@
 #include <SDL.h>		// Always needs to be included for an SDL app
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include "GameObject.h"
 
-class Scene
+class Scene:
+	public GameObject
 {
 public:
 	Scene();
@@ -23,9 +25,6 @@ public:
 	};
 
 	virtual void EventHandler() = 0;
-	virtual void Update() = 0;
-	virtual void Draw() = 0;
-
 	SceneState getState();
 
 protected:

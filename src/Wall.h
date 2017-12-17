@@ -7,8 +7,8 @@ public:
 	Wall(int x, int y);
 	~Wall();
 
-	void Update() override;
-	void Draw() override;
+	virtual void Update() override;
+	virtual void Draw() override;
 
 	void destroyWall();
 	
