@@ -7,6 +7,7 @@ int main()
 {
 	try
 	{
+		std::cout << "ja em funciona";
 		Game Bomberman;
 		Bomberman.run();
 	}
