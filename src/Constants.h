@@ -10,6 +10,10 @@
 #define HUD_WIDTH 624
 #define HUD_HEIGHT 80
 
+//player constants:
+#define STEPS 16;
+
+
 const std::string MENU_BG = "MENU_BG";
 const std::string LEVEL_BG = "LEVEL_BG";
 const std::string PLAYER1_SPRITE = "PLAYER1_SPRITE";

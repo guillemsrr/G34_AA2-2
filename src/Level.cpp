@@ -1,6 +1,6 @@
 #include "Level.h"
 
-Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, step{ 16 }, m_hud{new HUD(p1, p2)}
+Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown{ 0 }, p1{ new Player(1) }, p2{ new Player(2) }, m_hud{new HUD(p1, p2)}
 {
 	m_sceneState= Scene::SceneState::Running;
 	Renderer::Instance()->LoadTexture(LEVEL_BG, PATH_IMG + "bgGame.jpg");
@@ -16,9 +16,9 @@ Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown
 
 
 	//start the grid:
-	for (int i = 0; i <= 10; i++)
+	for (int i = 0; i <= 10; i++)// i ->files
 	{
-		for (int j = 0; j <= 12; j++)
+		for (int j = 0; j <= 12; j++)//j ->columnes
 		{
 			if (i == 5 && j == 0) 
 			{
@@ -37,6 +37,9 @@ Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown
 				wallList.push_back(new Wall(i,j));
 				grid[i][j] = "wall";
 			}
+			//posar els blocks
+
+
 			else grid[i][j] = "empty";
 		}
 	}
@@ -57,9 +60,12 @@ void Level::EventHandler()
 		case SDL_QUIT:	
 			exit = true;	 
 			break;
-		case SDL_KEYDOWN:	
+		case SDL_KEYDOWN:
 			if (event.key.keysym.sym == SDLK_ESCAPE) exit = true;
-			if(!p1->moving && !p2->moving) keyDown = event.key.keysym.sym; 
+			//********************************************************************************************************************************
+			if(!p1->moving && !p2->moving) 
+				keyDown = event.key.keysym.sym;
+			//********************************************************************************************************************************
 			break;
 		default:;
 		}
@@ -94,7 +100,8 @@ void Level::Update()
 			p1->playerRect.x += p1->playerRect.w;
 			if (p1->playerRect.x >= p1->playerRect.w * 2)
 				p1->playerRect.x = 0;
-			p1->playerPosition.y -= step;
+			p1->playerPosition.y -= STEPS;//step;
+
 			if (p1->isInPosition())
 			{
 				grid[p1->posJ][p1->posI] = "empty";
@@ -229,10 +236,11 @@ void Level::Update()
 			if (p2->ptrBomb == nullptr)
 			{
 				setExplosionLimits(p2);
-				p2->bomb(explosionLimits);
+				p2->bomb(explosionLimits2);//
 			}
 		}
 
+		//*******************************************************************************************************
 		if (!p2->moving && p1->isInPosition())
 		{
 			p1->moving = false;
@@ -244,6 +252,7 @@ void Level::Update()
 			p2->moving = false;
 			keyDown = NULL;
 		}
+		//*******************************************************************************************************
 	}
 
 	//Map Limits:
@@ -263,7 +272,7 @@ void Level::Update()
 		p1->playerPosition.y = (SCREEN_HEIGHT - 80) / 13 + 80;
 		p1->moving = false;
 	}
-		
+	//*******************************************************************************************************	
 	if (p1->playerPosition.y > (SCREEN_HEIGHT - ((SCREEN_HEIGHT - 80) / 13 + 80)))
 	{
 		p1->playerPosition.y = SCREEN_HEIGHT - ((SCREEN_HEIGHT - 80) / 13 + 80);
@@ -294,13 +303,13 @@ void Level::Update()
 	}
 
 	//Blocks Collisions:
-	for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)
+	for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)//CANVIAR PER GRID[][]//*******************************************************************************************************
 	{
 		if (isCollisioning(p1->playerPosition, *it))
 		{
 			if (keyDown == SDLK_w)
 			{
-				p1->playerPosition.y += step;
+				p1->playerPosition.y += STEPS;
 				p1->moving = false;
 
 			}
@@ -450,7 +459,7 @@ void Level::Draw()
 	//Background
 	Renderer::Instance()->PushImage(LEVEL_BG, { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT });
 
-	//Blocks:
+	//Blocks://*******************************************************************************************************//*******************************************************************************************************
 	for (int i = 1; i <= 9; i++)
 	{
 		for (int j = 1; j <= 11; j++)
@@ -463,16 +472,18 @@ void Level::Draw()
 				grid[i][j] = "block";
 			}
 		}
-	}
+	}//*******************************************************************************************************//*******************************************************************************************************
 	
 	//Bombs:
-	if (p1->ptrBomb != nullptr && !p1->ptrBomb->end)
+	if (p1->ptrBomb != nullptr)
 	{
-		p1->ptrBomb->Draw();
+		if(!p1->ptrBomb->end)
+			p1->ptrBomb->Draw();
 	}
-	if (p2->ptrBomb != nullptr && !p2->ptrBomb->end)
+	if (p2->ptrBomb != nullptr)
 	{
-		p2->ptrBomb->Draw();
+		if(!p2->ptrBomb->end)
+			p2->ptrBomb->Draw();
 	}
 
 	//Animated Sprite
@@ -494,6 +505,7 @@ void Level::setExplosionLimits(Player *p)
 {
 	if (p->posI - 1 >= 0 && grid[p->posJ][p->posI - 1] != "block")
 	{
+		//p->expl...
 		explosionLimits[1] = true;
 		if (p->posI - 2 >= 0 && grid[p->posJ][p->posI - 2] != "block")
 		{

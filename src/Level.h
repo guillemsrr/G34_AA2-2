@@ -5,6 +5,7 @@
 #include <vector>
 #include "HUD.h"
 #include "Wall.h"
+#include "Grid.h"
 
 #define SPEED 10
 
@@ -23,7 +24,7 @@ private:
 	int lvlNumber, textWidth, textHeight, frameWidth, frameHeight, frameTime;
 	//control:
 	std::string grid[13][11];
-	int keyDown, step;
+	int keyDown, step=STEPS;
 	SDL_Rect blockRect, wallRect; //helmetRect, shieldRect, rollerRect;
 	std::list<SDL_Rect> blockList;
 	bool exit;
@@ -31,14 +32,14 @@ private:
 	bool explosionLimits[8];
 	void setExplosionLimits(Player *p);
 	void restartExplosionLimits();
+	bool explosionLimits2[8];
+	void setExplosionLimits2(Player *p);
+	void restartExplosionLimits2();
 	void checkDamage(Player *p);
 	void changePlayerLocation(Player *p);
 	HUD *m_hud;
 	Wall *w;
 	std::list<Wall*> wallList;
 	void detectWall(int x, int y);
-
-
-
 };
 
