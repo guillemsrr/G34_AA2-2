@@ -42,6 +42,7 @@ bool Player::isInPosition()
 {
 	if (((playerPosition.x % (SCREEN_WIDTH / 15)) == 0) && (((playerPosition.y - 80) % ((SCREEN_HEIGHT - 80) / 13)== 0)))
 	{
+		moving = false;
 		return true;
 	}
 	else 

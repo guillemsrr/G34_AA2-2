@@ -20,18 +20,20 @@ Level::Level(int num) : exit{ false }, lvlNumber{ num }, frameTime{ 0 }, keyDown
 	{
 		for (int j = 0; j <= 12; j++)//j ->columnes
 		{
-			if (i == 5 && j == 0) 
+			if (i == 5 && j == 0)
 			{
 				grid[i][j] = "player1";
 				p1->posI = i;
 				p1->posJ = j;
-			} 
+			}
 			else if (i == 5 && j == 12)
 			{
 				grid[i][j] = "player2";
 				p2->posI = i;
 				p2->posJ = j;
 			}
+			else if (i % 2 == 1 && j % 2 == 1 )
+				grid[i][j] = "block";
 			else if (rand() % 4 == 1)
 			{
 				wallList.push_back(new Wall(i,j));
@@ -94,132 +96,156 @@ void Level::Update()
 	{
 		if (keyDown == SDLK_w)
 		{
-			p1->moving = true;
-			frameTime = 0;
-			p1->playerRect.y = 0;
-			p1->playerRect.x += p1->playerRect.w;
-			if (p1->playerRect.x >= p1->playerRect.w * 2)
-				p1->playerRect.x = 0;
-			p1->playerPosition.y -= STEPS;//step;
-
-			if (p1->isInPosition())
+			if (grid[p1->playerPosition.x][p1->playerPosition.y - 1] == "empty")
 			{
-				grid[p1->posJ][p1->posI] = "empty";
-				p1->posI--;
-				grid[p1->posJ][p1->posI] = "player1";
+				p1->moving = true;
+				frameTime = 0;
+				p1->playerRect.y = 0;
+				p1->playerRect.x += p1->playerRect.w;
+				if (p1->playerRect.x >= p1->playerRect.w * 2)
+					p1->playerRect.x = 0;
+				p1->playerPosition.y -= STEPS;//step;
+
+				if (p1->isInPosition())
+				{
+					grid[p1->posJ][p1->posI] = "empty";
+					p1->posI--;
+					grid[p1->posJ][p1->posI] = "player1";
+				}
 			}
 		}
 		else if (keyDown == SDLK_a)
 		{
-			p1->moving = true;
-			frameTime = 0;
-			p1->playerRect.y = p1->playerRect.h;
-			p1->playerRect.x += p1->playerRect.w;
-			if (p1->playerRect.x >= p1->playerRect.w * 3)
-				p1->playerRect.x = 0;
-			p1->playerPosition.x -= step;
-			if (p1->isInPosition())
+			if (grid[p1->playerPosition.x-1][p1->playerPosition.y] == "empty")
 			{
-				grid[p1->posJ][p1->posI] = "empty";
-				p1->posJ--;
-				grid[p1->posJ][p1->posI] = "player1";
+				p1->moving = true;
+				frameTime = 0;
+				p1->playerRect.y = p1->playerRect.h;
+				p1->playerRect.x += p1->playerRect.w;
+				if (p1->playerRect.x >= p1->playerRect.w * 3)
+					p1->playerRect.x = 0;
+				p1->playerPosition.x -= step;
+				if (p1->isInPosition())
+				{
+					grid[p1->posJ][p1->posI] = "empty";
+					p1->posJ--;
+					grid[p1->posJ][p1->posI] = "player1";
+				}
 			}
 		}
 		else if (keyDown == SDLK_s)
 		{
-			p1->moving = true;
-			frameTime = 0;
-			p1->playerRect.y = p1->playerRect.h * 2;
-			p1->playerRect.x += p1->playerRect.w;
-			if (p1->playerRect.x >= p1->playerRect.w * 3)
-				p1->playerRect.x = 0;
-			p1->playerPosition.y += step;
-			if (p1->isInPosition())
+			if (grid[p1->playerPosition.x][p1->playerPosition.y + 1] == "empty")
 			{
-				grid[p1->posJ][p1->posI] = "empty";
-				p1->posI++;
-				grid[p1->posJ][p1->posI] = "player1";
+				p1->moving = true;
+				frameTime = 0;
+				p1->playerRect.y = p1->playerRect.h * 2;
+				p1->playerRect.x += p1->playerRect.w;
+				if (p1->playerRect.x >= p1->playerRect.w * 3)
+					p1->playerRect.x = 0;
+				p1->playerPosition.y += step;
+				if (p1->isInPosition())
+				{
+					grid[p1->posJ][p1->posI] = "empty";
+					p1->posI++;
+					grid[p1->posJ][p1->posI] = "player1";
+				}
 			}
 		}
 
 		else if (keyDown == SDLK_d)
 		{
-			p1->moving = true;
-			frameTime = 0;
-			p1->playerRect.y = p1->playerRect.h * 3;
-			p1->playerRect.x += p1->playerRect.w;
-			if (p1->playerRect.x >= p1->playerRect.w* 3)
-				p1->playerRect.x = 0;
-			p1->playerPosition.x += step;
-			if (p1->isInPosition())
+			if (grid[p1->playerPosition.x + 1][p1->playerPosition.y] == "empty")
 			{
-				grid[p1->posJ][p1->posI] = "empty";
-				p1->posJ++;
-				grid[p1->posJ][p1->posI] = "player1";
+				p1->moving = true;
+				frameTime = 0;
+				p1->playerRect.y = p1->playerRect.h * 3;
+				p1->playerRect.x += p1->playerRect.w;
+				if (p1->playerRect.x >= p1->playerRect.w * 3)
+					p1->playerRect.x = 0;
+				p1->playerPosition.x += step;
+				if (p1->isInPosition())
+				{
+					grid[p1->posJ][p1->posI] = "empty";
+					p1->posJ++;
+					grid[p1->posJ][p1->posI] = "player1";
+				}
 			}
 		}
 		if (keyDown == SDLK_UP)
 		{
-			p2->moving = true;
-			frameTime = 0;
-			p2->playerRect.y = 0;
-			p2->playerRect.x += p2->playerRect.w;
-			if (p2->playerRect.x >= p2->playerRect.w * 2)
-				p2->playerRect.x = 0;
-			p2->playerPosition.y -= step;
-			if (p2->isInPosition())
+			if (grid[p2->playerPosition.x][p2->playerPosition.y - 1] == "empty")
 			{
-				grid[p2->posJ][p2->posI] = "empty";
-				p1->posJ--;
-				grid[p2->posJ][p2->posI] = "player2";
+				p2->moving = true;
+				frameTime = 0;
+				p2->playerRect.y = 0;
+				p2->playerRect.x += p2->playerRect.w;
+				if (p2->playerRect.x >= p2->playerRect.w * 2)
+					p2->playerRect.x = 0;
+				p2->playerPosition.y -= step;
+				if (p2->isInPosition())
+				{
+					grid[p2->posJ][p2->posI] = "empty";
+					p1->posJ--;
+					grid[p2->posJ][p2->posI] = "player2";
+				}
 			}
 		}
 		else if (keyDown == SDLK_LEFT)
 		{
-			p2->moving = true;
-			frameTime = 0;
-			p2->playerRect.y = p2->playerRect.h;
-			p2->playerRect.x += p2->playerRect.w;
-			if (p2->playerRect.x >= p2->playerRect.w* 3)
-				p2->playerRect.x = 0;
-			p2->playerPosition.x -= step;
-			if (p2->isInPosition())
+			if (grid[p2->playerPosition.x - 1][p2->playerPosition.y] == "empty")
 			{
-				grid[p2->posJ][p2->posI] = "empty";
-				p1->posJ--;
-				grid[p2->posJ][p2->posI] = "player2";
+				p2->moving = true;
+				frameTime = 0;
+				p2->playerRect.y = p2->playerRect.h;
+				p2->playerRect.x += p2->playerRect.w;
+				if (p2->playerRect.x >= p2->playerRect.w * 3)
+					p2->playerRect.x = 0;
+				p2->playerPosition.x -= step;
+				if (p2->isInPosition())
+				{
+					grid[p2->posJ][p2->posI] = "empty";
+					p1->posJ--;
+					grid[p2->posJ][p2->posI] = "player2";
+				}
 			}
 		}
 		else if (keyDown == SDLK_DOWN)
 		{
-			p2->moving = true;
-			frameTime = 0;
-			p2->playerRect.y = p2->playerRect.h* 2;
-			p2->playerRect.x += p2->playerRect.w;
-			if (p2->playerRect.x >= p2->playerRect.w * 3)
-				p2->playerRect.x = 0;
-			p2->playerPosition.y += step;
-			if (p2->isInPosition())
+			if (grid[p2->playerPosition.x][p2->playerPosition.y + 1] == "empty")
 			{
-				grid[p2->posJ][p2->posI] = "empty";
-				p1->posI++;
-				grid[p2->posJ][p2->posI] = "player2";
+				p2->moving = true;
+				frameTime = 0;
+				p2->playerRect.y = p2->playerRect.h * 2;
+				p2->playerRect.x += p2->playerRect.w;
+				if (p2->playerRect.x >= p2->playerRect.w * 3)
+					p2->playerRect.x = 0;
+				p2->playerPosition.y += step;
+				if (p2->isInPosition())
+				{
+					grid[p2->posJ][p2->posI] = "empty";
+					p1->posI++;
+					grid[p2->posJ][p2->posI] = "player2";
+				}
 			}
 		}
 		else if (keyDown == SDLK_RIGHT)
 		{
-			p2->moving = true;
-			frameTime = 0;
-			p2->playerRect.y = p2->playerRect.h* 3;
-			p2->playerRect.x += p2->playerRect.w;
-			if (p2->playerRect.x >= p2->playerRect.w * 3)
-				p2->playerRect.x = 0;
-			p2->playerPosition.x += step;
-			if (p2->isInPosition())
+			if (grid[p2->playerPosition.x + 1][p2->playerPosition.y] == "empty")
 			{
-				grid[p2->posJ][p2->posI] = "empty";
-				p1->posJ++;
-				grid[p2->posJ][p2->posI] = "player2";
+				p2->moving = true;
+				frameTime = 0;
+				p2->playerRect.y = p2->playerRect.h * 3;
+				p2->playerRect.x += p2->playerRect.w;
+				if (p2->playerRect.x >= p2->playerRect.w * 3)
+					p2->playerRect.x = 0;
+				p2->playerPosition.x += step;
+				if (p2->isInPosition())
+				{
+					grid[p2->posJ][p2->posI] = "empty";
+					p1->posJ++;
+					grid[p2->posJ][p2->posI] = "player2";
+				}
 			}
 		}
 
@@ -303,17 +329,22 @@ void Level::Update()
 	}
 
 	//Blocks Collisions:
-	for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)//CANVIAR PER GRID[][]//*******************************************************************************************************
+	/*for (std::list<SDL_Rect>::const_iterator it = blockList.cbegin(); it != blockList.cend(); ++it)//CANVIAR PER GRID[][]//*******************************************************************************************************
 	{
 		if (isCollisioning(p1->playerPosition, *it))
 		{
 			if (keyDown == SDLK_w)
 			{
-				p1->playerPosition.y += STEPS;
-				p1->moving = false;
-
+				
+					p1->playerPosition.y += STEPS;
+					p1->moving = false;
+				}
 			}
 			else if (keyDown == SDLK_a)
+
+
+
+
 			{
 				p1->playerPosition.x += step;
 				p1->moving = false;
@@ -353,10 +384,10 @@ void Level::Update()
 				p2->moving = false;
 			}
 		}
-	}
+	}*/
 	//Wall Collisions:
 	
-	for (std::list<Wall*>::const_iterator it = wallList.cbegin(); it != wallList.cend(); ++it)
+	/*for (std::list<Wall*>::const_iterator it = wallList.cbegin(); it != wallList.cend(); ++it)
 	{
 		w = *it;
 		if (isCollisioning(p1->playerPosition, w->wallPosition))
@@ -407,7 +438,7 @@ void Level::Update()
 				p2->moving = false;
 			}
 		}
-	}
+	}*/
 
 	//Bombs:
 	if (p1->ptrBomb != nullptr)
@@ -458,18 +489,23 @@ void Level::Draw()
 
 	//Background
 	Renderer::Instance()->PushImage(LEVEL_BG, { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT });
-
+	
 	//Blocks://*******************************************************************************************************//*******************************************************************************************************
-	for (int i = 1; i <= 9; i++)
+	for (int i = 0; i <= 10; i++)
 	{
-		for (int j = 1; j <= 11; j++)
+		for (int j = 0; j <= 12; j++)
 		{
-			if (i % 2 != 0 && j % 2 != 0)
+			if (grid[i][j]=="block")
 			{
 				SDL_Rect blockPosition = { static_cast<int>((SCREEN_WIDTH / 15)* (j + 1)), static_cast<int>(((SCREEN_HEIGHT - 80) / 13)* (i + 1) + 80), 48,48 };
 				Renderer::Instance()->PushSprite(ITEMS, blockRect, blockPosition);
 				blockList.push_back(blockPosition);
-				grid[i][j] = "block";
+				//grid[i][j] = "block";
+			}
+			else if (grid[i][j] == "wall")
+			{
+				w = new Wall(i,j);
+				w->Draw();
 			}
 		}
 	}//*******************************************************************************************************//*******************************************************************************************************
@@ -493,11 +529,11 @@ void Level::Draw()
 	//HUD:
 	m_hud->Draw();
 	
-	for (std::list<Wall*>::const_iterator it = wallList.cbegin(); it != wallList.cend(); ++it)
+	/*for (std::list<Wall*>::const_iterator it = wallList.cbegin(); it != wallList.cend(); ++it)
 	{
 		w = *it;
 		w->Draw();
-	}
+	}*/
 	Renderer::Instance()->Render();
 }
 
