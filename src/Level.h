@@ -23,7 +23,7 @@ private:
 	Player *p1, *p2;
 	int lvlNumber, textWidth, textHeight, frameWidth, frameHeight, frameTime;
 	//control:
-	std::string grid[13][11];
+	std::string grid[11][13];
 	int keyDown, step=STEPS;
 	SDL_Rect blockRect, wallRect; //helmetRect, shieldRect, rollerRect;
 	std::list<SDL_Rect> blockList;

@@ -75,7 +75,17 @@ void Game::run()
 			{
 			case GameState::MENU:
 				delete m_currentScene;
-				m_currentScene = new Ranking();
+				m_currentScene = new Ranking("read");
+				m_gameState = GameState::RANKING;
+				break;
+			case GameState::LEVEL1:
+				delete m_currentScene;
+				m_currentScene = new Ranking("save");
+				m_gameState = GameState::RANKING;
+				break;
+			case GameState::LEVEL2:
+				delete m_currentScene;
+				m_currentScene = new Ranking("save");
 				m_gameState = GameState::RANKING;
 				break;
 			default:

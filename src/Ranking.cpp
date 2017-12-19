@@ -12,23 +12,23 @@ Ranking::Ranking(std::string s)
 
 			for (std::list<int>::const_iterator it = sizesList.cbegin(); it != sizesList.cend(); ++it)
 			{
-				fentrada.read(/*????????????????????*/, *it);
+				//fentrada.read(/*????????????????????*/, *it);
 			}
 
 			fentrada.close();
 		}
 	}
-	else if (s == "save")
-	{
-		if (fileExists(rankingFile)
-		{
+	//else if (s == "save")
+	//{
+	//	if (fileExists(rankingFile)
+	//	{
 
-		}
-		else
-		{
+	//	}
+	//	else
+	//	{
 
-		}
-	}
+	//	}
+	//}
 	
 }
 
