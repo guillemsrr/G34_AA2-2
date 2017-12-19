@@ -48,6 +48,7 @@ const std::string ACTUAL_PLAYER2_POINTS_TEXT = "ACTUAL_PLAYER2_POINTS_TEXT";
 const std::string PATH_IMG = "../res/img/";
 const std::string PATH_FONT = "../res/ttf/";
 const std::string PATH_AU = "../res/au/";
+const std::string PATH_FILES = "../res/files/";
 
 const std::string SAIYAN = "SAIYAN";
 const std::string GAME_OVER = "GAME_OVER";

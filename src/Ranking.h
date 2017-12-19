@@ -14,5 +14,5 @@ public:
 private:
 	const std::string rankingFile= PATH_FILES + "ranking.bin";
 	bool fileExists(const std::string fileName);
-	std::list<int> rankingList;
+	std::list<int> sizesList;
 };

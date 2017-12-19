@@ -10,7 +10,7 @@ Ranking::Ranking(std::string s)
 		{		
 			std::ifstream fentrada(rankingFile, std::ios::in | std::ios::binary);
 
-			for (std::list<int>::const_iterator it = rankingList.cbegin(); it != rankingList.cend(); ++it)
+			for (std::list<int>::const_iterator it = sizesList.cbegin(); it != sizesList.cend(); ++it)
 			{
 				fentrada.read(/*????????????????????*/, *it);
 			}
