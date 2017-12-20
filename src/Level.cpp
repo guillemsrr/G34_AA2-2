@@ -94,9 +94,9 @@ void Level::Update()
 	}
 	if (SCREEN_FPS / frameTime <= SPEED)
 	{
-		if (keyDown == SDLK_w)
+		if (keyDown == SDLK_w && p1->posI >0)
 		{
-			if (grid[p1->playerPosition.x][p1->playerPosition.y - 1] == "empty")
+			if (grid[p1->posI-1][p1->posJ] == "empty")
 			{
 				p1->moving = true;
 				frameTime = 0;
@@ -114,9 +114,9 @@ void Level::Update()
 				}
 			}
 		}
-		else if (keyDown == SDLK_a)
+		else if (keyDown == SDLK_a && p1->posJ>0)
 		{
-			if (grid[p1->playerPosition.x-1][p1->playerPosition.y] == "empty")
+			if (grid[p1->posI][p1->posJ-1] == "empty")
 			{
 				p1->moving = true;
 				frameTime = 0;
@@ -133,9 +133,9 @@ void Level::Update()
 				}
 			}
 		}
-		else if (keyDown == SDLK_s)
+		else if (keyDown == SDLK_s && p1->posI<12)
 		{
-			if (grid[p1->playerPosition.x][p1->playerPosition.y + 1] == "empty")
+			if (grid[p1->posI+1][p1->posJ] == "empty")
 			{
 				p1->moving = true;
 				frameTime = 0;
@@ -153,9 +153,9 @@ void Level::Update()
 			}
 		}
 
-		else if (keyDown == SDLK_d)
+		else if (keyDown == SDLK_d && p1->posJ<12)
 		{
-			if (grid[p1->playerPosition.x + 1][p1->playerPosition.y] == "empty")
+			if (grid[p1->posI][p1->posJ+1] == "empty")
 			{
 				p1->moving = true;
 				frameTime = 0;
@@ -172,9 +172,9 @@ void Level::Update()
 				}
 			}
 		}
-		if (keyDown == SDLK_UP)
+		if (keyDown == SDLK_UP && p2->posI>0)
 		{
-			if (grid[p2->playerPosition.x][p2->playerPosition.y - 1] == "empty")
+			if (grid[p2->posI-1][p2->posJ] == "empty")
 			{
 				p2->moving = true;
 				frameTime = 0;
@@ -191,9 +191,9 @@ void Level::Update()
 				}
 			}
 		}
-		else if (keyDown == SDLK_LEFT)
+		else if (keyDown == SDLK_LEFT && p2->posJ>0)
 		{
-			if (grid[p2->playerPosition.x - 1][p2->playerPosition.y] == "empty")
+			if (grid[p2->posI][p2->posJ-1] == "empty")
 			{
 				p2->moving = true;
 				frameTime = 0;
@@ -210,9 +210,9 @@ void Level::Update()
 				}
 			}
 		}
-		else if (keyDown == SDLK_DOWN)
+		else if (keyDown == SDLK_DOWN && p2->posI<10)
 		{
-			if (grid[p2->playerPosition.x][p2->playerPosition.y + 1] == "empty")
+			if (grid[p2->posI+1][p2->posJ] == "empty")
 			{
 				p2->moving = true;
 				frameTime = 0;
@@ -229,9 +229,9 @@ void Level::Update()
 				}
 			}
 		}
-		else if (keyDown == SDLK_RIGHT)
+		else if (keyDown == SDLK_RIGHT && p2->posJ<12)
 		{
-			if (grid[p2->playerPosition.x + 1][p2->playerPosition.y] == "empty")
+			if (grid[p2->posI][p2->posJ+1] == "empty")
 			{
 				p2->moving = true;
 				frameTime = 0;
